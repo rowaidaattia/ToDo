@@ -1,7 +1,7 @@
-package com.rowaida.todo.domain
+package com.rowaida.todo.domain.dataSource
 
-import com.rowaida.todo.data.modules.Note
-import com.rowaida.todo.data.modules.User
+import com.rowaida.todo.data.models.Note
+import com.rowaida.todo.data.models.User
 
 interface NoteDataSource {
 

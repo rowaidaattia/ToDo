@@ -1,4 +1,4 @@
-package com.rowaida.todo.data.modules
+package com.rowaida.todo.data.models
 
 enum class Status {
     DONE, IN_PROGRESS

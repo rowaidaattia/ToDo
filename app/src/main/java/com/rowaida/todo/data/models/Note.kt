@@ -1,4 +1,4 @@
-package com.rowaida.todo.data.modules
+package com.rowaida.todo.data.models
 
 data class Note (
     val note: String,
