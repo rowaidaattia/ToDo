@@ -29,6 +29,39 @@
             android:inputType="textPersonName" />
 
         <EditText
+            android:id="@+id/email_signup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/email"
+            android:inputType="textEmailAddress" />
+
+        <RadioGroup
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RadioButton
+                android:id="@+id/male"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/male" />
+
+            <RadioButton
+                android:id="@+id/female"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/female" />
+
+            <EditText
+                android:id="@+id/birthday"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="@string/birthday"
+                android:inputType="date" />
+        </RadioGroup>
+
+        <EditText
             android:id="@+id/password_signup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

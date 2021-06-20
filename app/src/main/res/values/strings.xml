@@ -9,4 +9,8 @@
     <string name="logout">Logout</string>
     <string name="status">Status</string>
     <string name="test">Test</string>
+    <string name="birthday">Date of Birth</string>
+    <string name="email">E-mail</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
 </resources>

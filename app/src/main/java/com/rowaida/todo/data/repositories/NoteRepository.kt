@@ -1,8 +1,7 @@
 package com.rowaida.todo.data.repositories
 
 import com.rowaida.todo.data.models.Note
-import com.rowaida.todo.data.models.User
-import com.rowaida.todo.domain.dataSource.NoteDataSource
+import com.rowaida.todo.data.dataSource.NoteDataSource
 import com.rowaida.todo.domain.repositoryInterface.NoteRepositoryInterface
 
 class NoteRepository (private val noteDataSource: NoteDataSource) : NoteRepositoryInterface {

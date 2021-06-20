@@ -3,7 +3,7 @@ package com.rowaida.todo.data.db
 import android.content.Context
 import com.rowaida.todo.data.models.Note
 import com.rowaida.todo.data.models.Status
-import com.rowaida.todo.domain.dataSource.NoteDataSource
+import com.rowaida.todo.data.dataSource.NoteDataSource
 
 class RoomNoteDataSource (context: Context) : NoteDataSource {
 

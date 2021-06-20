@@ -3,7 +3,7 @@ package com.rowaida.todo.presentation
 import android.app.Application
 import com.rowaida.todo.data.models.Note
 import com.rowaida.todo.framework.ToDoViewModel
-import com.rowaida.todo.useCases.UseCases
+import com.rowaida.todo.domain.useCases.UseCases
 
 class NoteViewModel (application: Application, useCases: UseCases) :
     ToDoViewModel(application, useCases) {

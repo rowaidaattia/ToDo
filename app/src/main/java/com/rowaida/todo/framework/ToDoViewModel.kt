@@ -2,7 +2,7 @@ package com.rowaida.todo.framework
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import com.rowaida.todo.useCases.UseCases
+import com.rowaida.todo.domain.useCases.UseCases
 
 open class ToDoViewModel(application: Application, protected val interactors: UseCases) :
     AndroidViewModel(application) {

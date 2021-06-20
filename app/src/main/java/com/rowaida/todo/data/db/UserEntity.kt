@@ -2,8 +2,11 @@ package com.rowaida.todo.data.db
 
 import androidx.room.*
 
-@Entity(tableName = "User")
+@Entity(tableName = "User", primaryKeys = ["username", "email"])
 data class UserEntity(
-    @PrimaryKey val username: String,
-    val password: String
+    val username: String,
+    val password: String,
+    val gender: String,
+    val email: String,
+    val birthday: String
 )

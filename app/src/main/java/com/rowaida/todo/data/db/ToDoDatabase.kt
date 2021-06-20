@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.*
 
 @Database(entities = [UserEntity::class, NoteEntity::class], version = 1)
+//@TypeConverters(Converters::class)
 abstract class ToDoDatabase : RoomDatabase() {
 
     companion object {

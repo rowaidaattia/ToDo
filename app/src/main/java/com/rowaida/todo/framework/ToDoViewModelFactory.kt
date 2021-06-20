@@ -3,7 +3,7 @@ package com.rowaida.todo.framework
 import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.rowaida.todo.useCases.UseCases
+import com.rowaida.todo.domain.useCases.UseCases
 
 object ToDoViewModelFactory : ViewModelProvider.Factory {
 

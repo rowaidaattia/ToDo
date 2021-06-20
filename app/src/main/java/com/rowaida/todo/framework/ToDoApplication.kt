@@ -3,7 +3,7 @@ package com.rowaida.todo.framework
 import android.app.Application
 import com.rowaida.todo.data.db.*
 import com.rowaida.todo.data.repositories.*
-import com.rowaida.todo.useCases.*
+import com.rowaida.todo.domain.useCases.*
 
 class ToDoApplication : Application() {
 
