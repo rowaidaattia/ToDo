@@ -6,9 +6,9 @@ import androidx.room.*
 interface UserDao {
 
     @Insert
-    fun insertUser(user: UserEntity)
+    fun addUser(user: UserEntity)
 
-//    @Query("SELECT * FROM user WHERE username LIKE :username")
-//    fun getUser(username: String): UserDao
+    @Query("SELECT EXISTS(SELECT * FROM User WHERE username = :username AND password = :password)")
+    fun checkUser(username: String, password: String) : Boolean
 
 }

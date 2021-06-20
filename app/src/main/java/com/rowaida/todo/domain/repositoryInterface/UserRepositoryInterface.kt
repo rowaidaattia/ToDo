@@ -7,6 +7,6 @@ interface UserRepositoryInterface {
 
     fun addUser(user: User)
 
-    fun getNotes(user: User) : List<Note>
+    fun checkUser(user: User) : Boolean
 
 }

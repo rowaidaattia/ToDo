@@ -2,9 +2,8 @@ package com.rowaida.todo.data.db
 
 import androidx.room.*
 
-@Entity(tableName = "user")
+@Entity(tableName = "User")
 data class UserEntity(
     @PrimaryKey val username: String,
-    @ColumnInfo val password: String,
-    @ColumnInfo val notes: String?
+    val password: String
 )

@@ -5,9 +5,11 @@ import com.rowaida.todo.data.models.User
 
 interface NoteDataSource {
 
-    fun add(user: User, note: Note)
+    fun add(note: Note)
 
-    fun remove(user: User, note: Note)
+    fun remove(note: Note)
 
-    fun update(user: User, note: Note)
+    fun update(note: Note)
+
+    fun get(username: String) : List<Note>
 }

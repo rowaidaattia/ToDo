@@ -8,5 +8,6 @@ class UserRepository (private val userDataSource: UserDataSource) : UserReposito
 
     override fun addUser(user: User) = userDataSource.add(user)
 
-    override fun getNotes(user: User) = userDataSource.get(user)
+    override fun checkUser(user: User) = userDataSource.check(user)
+
 }

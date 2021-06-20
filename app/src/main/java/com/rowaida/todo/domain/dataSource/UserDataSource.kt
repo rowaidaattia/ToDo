@@ -7,6 +7,6 @@ interface UserDataSource {
 
     fun add(user: User)
 
-    fun get(user: User) : List<Note>
+    fun check(user: User) : Boolean
 
 }

@@ -7,10 +7,12 @@ import com.rowaida.todo.domain.repositoryInterface.NoteRepositoryInterface
 
 class NoteRepository (private val noteDataSource: NoteDataSource) : NoteRepositoryInterface {
 
-    override fun addNote(user: User, note: Note) = noteDataSource.add(user, note)
+    override fun addNote(note: Note) = noteDataSource.add(note)
 
-    override fun removeNote(user: User, note: Note) = noteDataSource.remove(user, note)
+    override fun removeNote(note: Note) = noteDataSource.remove(note)
 
-    override fun updateNote(user: User, note: Note) = noteDataSource.update(user, note)
+    override fun updateNote(note: Note) = noteDataSource.update(note)
+
+    override fun getNotes(username: String) = noteDataSource.get(username)
 
 }

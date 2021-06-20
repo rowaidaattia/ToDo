@@ -3,12 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".presentation.MainActivity">
+    android:layout_height="match_parent">
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_marginBottom="1dp"
         android:layout_marginEnd="1dp"
         android:layout_marginLeft="1dp"
@@ -21,18 +20,32 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <Button
-            android:id="@+id/login_button"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:onClick="goToLogin"
-            android:text="@string/login" />
-
-        <Button
-            android:id="@+id/signup_button"
+        <EditText
+            android:id="@+id/username_login"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="goToSignup"
-            android:text="@string/sign_up" />
+            android:ems="10"
+            android:hint="@string/username"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/password_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/password"
+            android:inputType="textPassword" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="15dp" />
+
+        <Button
+            android:id="@+id/login_button2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="goToNotes"
+            android:text="@string/login" />
+
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

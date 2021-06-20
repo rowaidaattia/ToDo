@@ -14,7 +14,6 @@ abstract class ToDoDatabase : RoomDatabase() {
 
         private fun create(context: Context): ToDoDatabase =
             Room.databaseBuilder(context, ToDoDatabase::class.java, DATABASE_NAME)
-                .fallbackToDestructiveMigration()
                 .build()
 
 
@@ -25,5 +24,7 @@ abstract class ToDoDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
 
     abstract fun noteDao(): NoteDao
+
+    abstract fun userWithNotesDao(): UserWithNotesDao
 
 }
