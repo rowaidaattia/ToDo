@@ -33,7 +33,7 @@ class LoginActivity : AppCompatActivity() {
             //go to notes activity
             val intent = Intent(this, NotesActivity::class.java)
             intent.putExtra("Username", username)
-            //startActivity(Intent(this, NotesActivity::class.java))
+            startActivity(intent)
         }
     }
 

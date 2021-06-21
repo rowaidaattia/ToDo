@@ -9,11 +9,11 @@ class UserViewModel (application: Application, useCases: UseCases) :
     ToDoViewModel(application, useCases) {
 
     fun addUser(user: User) {
-        interactors.addUserUseCase(user)
+        useCases.addUserUseCase(user)
     }
 
     fun checkUser(user: User) {
-        interactors.checkUserUseCase(user)
+        useCases.checkUserUseCase(user)
     }
 
 }

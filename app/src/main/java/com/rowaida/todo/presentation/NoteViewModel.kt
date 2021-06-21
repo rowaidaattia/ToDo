@@ -9,19 +9,19 @@ class NoteViewModel (application: Application, useCases: UseCases) :
     ToDoViewModel(application, useCases) {
 
     fun addNote(note: Note) {
-        interactors.addNoteUseCase(note)
+        useCases.addNoteUseCase(note)
     }
 
     fun getNotes(username: String) {
-        interactors.getNotesUseCase(username)
+        useCases.getNotesUseCase(username)
     }
 
     fun removeNote(note: Note) {
-        interactors.addNoteUseCase(note)
+        useCases.addNoteUseCase(note)
     }
 
     fun updateNote(note: Note) {
-        interactors.addNoteUseCase(note)
+        useCases.addNoteUseCase(note)
     }
 
 }

@@ -6,10 +6,15 @@ import android.os.Bundle
 import android.text.InputType
 import android.view.View
 import android.widget.EditText
+import android.widget.RadioButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.*
 import com.rowaida.todo.R
+import com.rowaida.todo.data.models.Gender
+import com.rowaida.todo.data.models.User
+import com.rowaida.todo.framework.ToDoViewModelFactory
+import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -20,6 +25,9 @@ class SignupActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_signup)
+
+        viewModel = ViewModelProvider(this, ToDoViewModelFactory)
+                .get(UserViewModel::class.java)
 
         var birthdayText: EditText? = findViewById(R.id.birthday)
         birthdayText?.inputType = InputType.TYPE_NULL
@@ -43,10 +51,16 @@ class SignupActivity : AppCompatActivity() {
     fun goToNotes(v: View) {
         val username = findViewById<EditText>(R.id.username_signup).text.toString()
         val password = findViewById<EditText>(R.id.password_signup).text.toString()
+        val email = findViewById<EditText>(R.id.email_signup).text.toString()
+        val birthday = findViewById<EditText>(R.id.birthday).text.toString()
+        val male = findViewById<RadioButton>(R.id.male).isChecked
+        val female = findViewById<RadioButton>(R.id.female).isChecked
 
-        if (username.trim().isEmpty() || password.trim().isEmpty()) {
+        if (username.trim().isEmpty() || password.trim().isEmpty() ||
+            email.trim().isEmpty() || birthday.trim().isEmpty() ||
+            !(male || female)) {
             Toast.makeText(applicationContext,
-                "Please fill username and password fields",
+                "Please fill all fields fields",
                 Toast.LENGTH_LONG).show()
         }
         else {
@@ -55,10 +69,10 @@ class SignupActivity : AppCompatActivity() {
                 Toast.LENGTH_LONG).show()
 
             //add user
-//            viewModel = ViewModelProvider(this, ToDoViewModelFactory)
-//                .get(UserViewModel::class.java)
-            //val user = User(username, password)
-            //viewModel.addUser(user)
+            val gender = if (male) Gender.MALE else Gender.FEMALE
+            val date = SimpleDateFormat("dd/MM/yyyy").parse(birthday)
+            val user = User(username, password, gender, email, date)
+            viewModel.addUser(user)
 
             //println("Check user: " + )
 

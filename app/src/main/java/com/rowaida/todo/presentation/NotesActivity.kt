@@ -6,18 +6,31 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.RecyclerView
 import com.rowaida.todo.R
+import com.rowaida.todo.data.models.Note
+import com.rowaida.todo.data.models.Status
 
 
 class NotesActivity : AppCompatActivity() {
 
-    val username = intent.getStringExtra("Username")
-
-    //get notes associated with that user
+    //val username = intent.getStringExtra("Username")
+    val username = "rowaida"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_notes)
+
+        val notes = username?.let { arrayOf(
+            Note(123, it, "1st note", Status.DONE),
+            Note(456, it, "2nd note", Status.DONE)
+        )}
+
+        val notesAdapter = notes?.let { NotesAdapter(it) }
+
+        val recyclerView: RecyclerView = findViewById(R.id.notes_recycler_view)
+        recyclerView.adapter = notesAdapter
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
