@@ -6,7 +6,7 @@ import androidx.room.*
 interface UserWithNotesDao {
 
     @Transaction
-    @Query("SELECT * FROM Note WHERE username LIKE :username")
-    fun getNotes(username: String): List<NoteEntity>
+    @Query("SELECT * FROM Note WHERE username LIKE :usernameOrEmail")
+    fun getNotes(usernameOrEmail: String): List<UserWithNotes>
 
 }

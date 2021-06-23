@@ -25,7 +25,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="@string/username"
+            android:hint="@string/username_email"
             android:inputType="textPersonName" />
 
         <EditText

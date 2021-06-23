@@ -4,8 +4,8 @@ import com.rowaida.todo.data.models.User
 
 interface UserDataSource {
 
-    fun add(user: User)
+    suspend fun add(user: User)
 
-    fun check(user: User) : Boolean
+    suspend fun check(usernameOrEmail: String, password: String) : Boolean
 
 }

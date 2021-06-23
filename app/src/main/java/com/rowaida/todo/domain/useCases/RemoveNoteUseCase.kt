@@ -5,6 +5,6 @@ import com.rowaida.todo.data.models.Note
 
 class RemoveNoteUseCase (private val noteRepository: NoteRepository) {
 
-    operator fun invoke(note: Note) = noteRepository.removeNote(note)
+    suspend operator fun invoke(note: Note) = noteRepository.removeNote(note)
 
 }

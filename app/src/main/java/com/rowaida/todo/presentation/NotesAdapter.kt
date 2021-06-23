@@ -1,21 +1,47 @@
 package com.rowaida.todo.presentation
 
 import android.view.*
+import android.view.LayoutInflater
 import android.widget.CheckBox
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.rowaida.todo.R
 import com.rowaida.todo.data.models.Note
 import com.rowaida.todo.data.models.Status
+import kotlinx.coroutines.runBlocking
 
-class NotesAdapter(private val notes: Array<Note>) :
+
+class NotesAdapter(private var notes: MutableList<Note>, val viewModel: NoteViewModel) :
     RecyclerView.Adapter<NotesAdapter.ViewHolder>() {
 
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val status: CheckBox = view.findViewById(R.id.note_status)
-        val note: TextView = view.findViewById(R.id.note_text)
-        //val delete: ImageButton = view.findViewById(R.id.delete_button)
+    inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val status: CheckBox = itemView.findViewById(R.id.note_status)
+        val note: TextView = itemView.findViewById(R.id.note_text)
+        private val button: ImageButton = itemView.findViewById(R.id.delete_button)
+
+        init {
+            button.setOnClickListener {
+                //delete button clicked
+                val deleteNote = notes[adapterPosition]
+                val username = deleteNote.username
+                runBlocking {
+                    viewModel.removeNote(Note(
+                        id = deleteNote.id,
+                        username = deleteNote.username,
+                        note = deleteNote.note,
+                        status = deleteNote.status
+                    ))
+                    notes = viewModel.getNotes(username) as MutableList<Note>
+                    println("NOTES: $notes")
+                    notifyDataSetChanged()
+                }
+                println("DELETE BUTTON CLICKED")
+            }
+        }
     }
+
+
 
     // Create new views (invoked by the layout manager)
     override fun onCreateViewHolder(viewGroup: ViewGroup, viewType: Int): ViewHolder {
@@ -41,6 +67,12 @@ class NotesAdapter(private val notes: Array<Note>) :
 
     // Return the size of your dataset (invoked by the layout manager)
     override fun getItemCount() = notes.size
+
+    fun update(updatedNotes: List<Note>) {
+        notes.clear()
+        notes.addAll(updatedNotes)
+        notifyDataSetChanged()
+    }
 
 }
 

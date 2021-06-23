@@ -5,12 +5,12 @@ import com.rowaida.todo.data.models.User
 
 interface NoteRepositoryInterface {
 
-    fun addNote(note: Note)
+    suspend fun addNote(note: Note)
 
-    fun removeNote(note: Note)
+    suspend fun removeNote(note: Note)
 
-    fun updateNote(note: Note)
+    suspend fun updateNote(note: Note)
 
-    fun getNotes(username: String) : List<Note>
+    suspend fun getNotes(username: String) : List<Note>
 
 }

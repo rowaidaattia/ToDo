@@ -5,6 +5,7 @@ import com.rowaida.todo.data.repositories.UserRepository
 
 class CheckUserUseCase (private val userRepository: UserRepository) {
 
-    operator fun invoke(user: User) = userRepository.checkUser(user)
+    suspend operator fun invoke(usernameOrEmail: String, password: String) : Boolean =
+        userRepository.checkUser(usernameOrEmail, password)
 
 }

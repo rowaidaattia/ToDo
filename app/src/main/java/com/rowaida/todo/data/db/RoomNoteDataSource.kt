@@ -10,7 +10,7 @@ class RoomNoteDataSource (context: Context) : NoteDataSource {
     private val noteDao = ToDoDatabase.getInstance(context).noteDao()
     private val userWithNotesDao = ToDoDatabase.getInstance(context).userWithNotesDao()
 
-    override fun add(note: Note) =
+    override suspend fun add(note: Note) =
         noteDao.addNote(
             NoteEntity(
             note.id,
@@ -19,7 +19,7 @@ class RoomNoteDataSource (context: Context) : NoteDataSource {
             note.status.name
         ))
 
-    override fun remove(note: Note) =
+    override suspend fun remove(note: Note) =
         noteDao.removeNote(
             NoteEntity(
                 note.id,
@@ -28,7 +28,7 @@ class RoomNoteDataSource (context: Context) : NoteDataSource {
                 note.status.name
             ))
 
-    override fun update(note: Note) =
+    override suspend fun update(note: Note) =
         noteDao.updateNote(
             NoteEntity(
                 note.id,
@@ -37,15 +37,24 @@ class RoomNoteDataSource (context: Context) : NoteDataSource {
                 note.status.name
             ))
 
-    override fun get(username: String) =
-        userWithNotesDao.getNotes(username).map {
-            Note(
-                it.id,
-                it.username,
-                it.note,
-                Status.valueOf(it.status)
-            )
+    override suspend fun get(username: String): List<Note> {
+        var notes = listOf<Note>()
+        if (!userWithNotesDao.getNotes(username).isNullOrEmpty()) {
+            notes =  userWithNotesDao.getNotes(username).first().notes.map {
+                Note(
+                    it.id,
+                    it.username,
+                    it.note,
+                    Status.valueOf(it.status)
+                )
+            }
         }
-
+//        else {
+//            println("HERE: NOTES IS EMPTY")
+//            //return mutableListOf()
+//        }
+//        println("HERE: NOTES IS NOT EMPTY $notes")
+        return notes
+    }
 
 }

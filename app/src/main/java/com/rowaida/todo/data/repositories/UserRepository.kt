@@ -6,8 +6,9 @@ import com.rowaida.todo.domain.repositoryInterface.UserRepositoryInterface
 
 class UserRepository (private val userDataSource: UserDataSource) : UserRepositoryInterface {
 
-    override fun addUser(user: User) = userDataSource.add(user)
+    override suspend fun addUser(user: User) = userDataSource.add(user)
 
-    override fun checkUser(user: User) = userDataSource.check(user)
+    override suspend fun checkUser(usernameOrEmail: String, password: String) : Boolean =
+        userDataSource.check(usernameOrEmail, password)
 
 }

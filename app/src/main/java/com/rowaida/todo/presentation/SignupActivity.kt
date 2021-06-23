@@ -1,7 +1,9 @@
 package com.rowaida.todo.presentation
 
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.content.Intent
+import android.database.sqlite.SQLiteConstraintException
 import android.os.Bundle
 import android.text.InputType
 import android.view.View
@@ -29,7 +31,7 @@ class SignupActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this, ToDoViewModelFactory)
                 .get(UserViewModel::class.java)
 
-        var birthdayText: EditText? = findViewById(R.id.birthday)
+        val birthdayText: EditText? = findViewById(R.id.birthday)
         birthdayText?.inputType = InputType.TYPE_NULL
         birthdayText?.setOnClickListener(View.OnClickListener {
             val cldr: Calendar = Calendar.getInstance()
@@ -38,7 +40,7 @@ class SignupActivity : AppCompatActivity() {
             val year: Int = cldr.get(Calendar.YEAR)
 
             // date picker dialog
-            var picker: DatePickerDialog = DatePickerDialog(this,
+            val picker: DatePickerDialog = DatePickerDialog(this,
                 { view, year, monthOfYear, dayOfMonth -> birthdayText.setText(dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + year) },
                 year,
                 month,
@@ -48,6 +50,7 @@ class SignupActivity : AppCompatActivity() {
         })
     }
 
+    @SuppressLint("SimpleDateFormat")
     fun goToNotes(v: View) {
         val username = findViewById<EditText>(R.id.username_signup).text.toString()
         val password = findViewById<EditText>(R.id.password_signup).text.toString()
@@ -64,22 +67,28 @@ class SignupActivity : AppCompatActivity() {
                 Toast.LENGTH_LONG).show()
         }
         else {
-            Toast.makeText(applicationContext,
-                "Username: $username, Password: $password",
-                Toast.LENGTH_LONG).show()
+//            Toast.makeText(applicationContext,
+//                "Username: $username, Password: $password",
+//                Toast.LENGTH_LONG).show()
 
             //add user
             val gender = if (male) Gender.MALE else Gender.FEMALE
             val date = SimpleDateFormat("dd/MM/yyyy").parse(birthday)
             val user = User(username, password, gender, email, date)
-            viewModel.addUser(user)
 
-            //println("Check user: " + )
+            try {
+                viewModel.addUser(user)
+                //go to notes activity
+                val intent = Intent(this, NotesActivity::class.java)
+                intent.putExtra("Username", username)
+                startActivity(intent)
+            }
+            catch (e: SQLiteConstraintException) {
+                Toast.makeText(applicationContext,
+                    "Username or email already exists",
+                    Toast.LENGTH_LONG).show()
+            }
 
-            //go to notes activity
-            val intent = Intent(this, NotesActivity::class.java)
-            intent.putExtra("Username", username)
-            //startActivity(Intent(this, NotesActivity::class.java))
         }
 
     }

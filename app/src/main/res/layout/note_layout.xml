@@ -22,7 +22,6 @@
         android:ellipsize="end"
         android:focusable="true"
         android:maxLines="1"
-        android:onClick="expandNote"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/delete_button"
         app:layout_constraintHorizontal_bias="0.0"

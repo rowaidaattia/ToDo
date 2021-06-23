@@ -5,6 +5,6 @@ import com.rowaida.todo.data.models.User
 
 class AddUserUseCase (private val userRepository: UserRepository) {
 
-    operator fun invoke(user: User) = userRepository.addUser(user)
+    suspend operator fun invoke(user: User) = userRepository.addUser(user)
 
 }

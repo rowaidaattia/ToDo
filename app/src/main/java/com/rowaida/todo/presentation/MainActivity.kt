@@ -13,6 +13,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
     }
 
+    override fun onBackPressed() {
+        //stay where you are
+    }
+
     fun goToLogin(v: View) {
         startActivity(Intent(this, LoginActivity::class.java))
     }

@@ -4,11 +4,11 @@ import com.rowaida.todo.data.models.Note
 
 interface NoteDataSource {
 
-    fun add(note: Note)
+    suspend fun add(note: Note)
 
-    fun remove(note: Note)
+    suspend fun remove(note: Note)
 
-    fun update(note: Note)
+    suspend fun update(note: Note)
 
-    fun get(username: String) : List<Note>
+    suspend fun get(username: String) : List<Note>
 }
