@@ -40,7 +40,7 @@ class RoomNoteDataSource (context: Context) : NoteDataSource {
     override suspend fun get(username: String): List<Note> {
         var notes = listOf<Note>()
         if (!userWithNotesDao.getNotes(username).isNullOrEmpty()) {
-            notes =  userWithNotesDao.getNotes(username).first().notes.map {
+            notes = userWithNotesDao.getNotes(username).first().notes.map {
                 Note(
                     it.id,
                     it.username,

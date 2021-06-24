@@ -16,9 +16,6 @@ import com.rowaida.todo.R
 import com.rowaida.todo.data.models.Note
 import com.rowaida.todo.data.models.Status
 import com.rowaida.todo.framework.ToDoViewModelFactory
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 
@@ -41,7 +38,11 @@ class NotesActivity : AppCompatActivity() {
 
         runBlocking {
             notes = viewModel.getNotes(username)
-            notesAdapter = NotesAdapter(notes as MutableList<Note>, viewModel)
+            notesAdapter = if (notes.isEmpty()) {
+                NotesAdapter(mutableListOf(), viewModel, this@NotesActivity)
+            } else {
+                NotesAdapter(notes as MutableList<Note>, viewModel, this@NotesActivity)
+            }
         }
 
         val recyclerView: RecyclerView = findViewById(R.id.notes_recycler_view)
