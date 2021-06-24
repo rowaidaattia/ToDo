@@ -22,7 +22,7 @@ import kotlinx.coroutines.runBlocking
 class NotesActivity : AppCompatActivity() {
 
     lateinit var username : String
-    private lateinit var viewModel: NoteViewModel
+    private lateinit var noteViewModel: NoteViewModel
     private lateinit var notesAdapter : NotesAdapter
     private lateinit var notes : List<Note>
 
@@ -33,15 +33,16 @@ class NotesActivity : AppCompatActivity() {
 
         username = intent.getStringExtra("Username").toString()
 
-        viewModel = ViewModelProvider(this, ToDoViewModelFactory)
+        noteViewModel = ViewModelProvider(this, ToDoViewModelFactory)
             .get(NoteViewModel::class.java)
 
+
         runBlocking {
-            notes = viewModel.getNotes(username)
+            notes = noteViewModel.getNotes(username)
             notesAdapter = if (notes.isEmpty()) {
-                NotesAdapter(mutableListOf(), viewModel, this@NotesActivity)
+                NotesAdapter(mutableListOf(), noteViewModel, this@NotesActivity)
             } else {
-                NotesAdapter(notes as MutableList<Note>, viewModel, this@NotesActivity)
+                NotesAdapter(notes as MutableList<Note>, noteViewModel, this@NotesActivity)
             }
         }
 
@@ -84,12 +85,12 @@ class NotesActivity : AppCompatActivity() {
 //            val note = edittext.text.toString()
             //add note to database
             runBlocking {
-                viewModel.addNote(Note(
+                noteViewModel.addNote(Note(
                     username = username,
                     note = edittext.text.toString(),
                     status = Status.IN_PROGRESS
                 ))
-                notes = viewModel.getNotes(username)
+                notes = noteViewModel.getNotes(username)
                 notesAdapter.update(notes)
             }
 
@@ -106,13 +107,13 @@ class NotesActivity : AppCompatActivity() {
 
     fun deleteNote(note : Note) {
         runBlocking {
-            viewModel.removeNote(Note(
+            noteViewModel.removeNote(Note(
                 id = note.id,
                 username = note.username,
                 note = note.note,
                 status = note.status
             ))
-            notes = viewModel.getNotes(username)
+            notes = noteViewModel.getNotes(username)
             notesAdapter.update(notes)
         }
     }

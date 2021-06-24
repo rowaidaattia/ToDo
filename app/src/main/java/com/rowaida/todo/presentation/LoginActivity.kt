@@ -35,8 +35,9 @@ class LoginActivity : AppCompatActivity() {
         else {
             //check valid credentials
             if (viewModel.checkUser(usernameOrEmail, password)) {
+                val username = viewModel.getUsername(usernameOrEmail)
                 val intent = Intent(this, NotesActivity::class.java)
-                intent.putExtra("Username", usernameOrEmail)
+                intent.putExtra("Username", username)
                 startActivity(intent)
             }
             else {

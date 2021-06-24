@@ -8,7 +8,7 @@ class RoomUserDataSource (context: Context) : UserDataSource {
 
     private val userDao = ToDoDatabase.getInstance(context).userDao()
 
-    override suspend fun add(user: User) =
+    override suspend fun add(user: User) : Long =
         userDao.addUser(UserEntity(
             user.username,
             user.password,
@@ -19,5 +19,8 @@ class RoomUserDataSource (context: Context) : UserDataSource {
 
     override suspend fun check(usernameOrEmail: String, password: String): Boolean =
         userDao.checkUser(usernameOrEmail, password)
+
+    override suspend fun get(usernameOrEmail: String): String =
+        userDao.getUsername(usernameOrEmail)
 
 }

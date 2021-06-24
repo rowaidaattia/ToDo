@@ -20,6 +20,7 @@ class ToDoApplication : Application() {
                 AddUserUseCase(userRepository),
                 CheckUserUseCase(userRepository),
                 GetNotesUseCase(noteRepository),
+                GetUsernameUseCase(userRepository),
                 RemoveNoteUseCase(noteRepository),
                 UpdateNoteUseCase(noteRepository)
             )

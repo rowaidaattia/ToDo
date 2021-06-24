@@ -76,14 +76,13 @@ class SignupActivity : AppCompatActivity() {
             val date = SimpleDateFormat("dd/MM/yyyy").parse(birthday)
             val user = User(username, password, gender, email, date)
 
-            try {
-                viewModel.addUser(user)
+            if (viewModel.addUser(user).toInt() != -1) {
                 //go to notes activity
                 val intent = Intent(this, NotesActivity::class.java)
                 intent.putExtra("Username", username)
                 startActivity(intent)
             }
-            catch (e: SQLiteConstraintException) {
+            else {
                 Toast.makeText(applicationContext,
                     "Username or email already exists",
                     Toast.LENGTH_LONG).show()
