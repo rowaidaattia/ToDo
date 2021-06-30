@@ -23,7 +23,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
-            android:onClick="addNote"
             app:backgroundTint="#673AB7"
             app:srcCompat="@drawable/ic_add" />
 

@@ -1,4 +1,4 @@
-package com.rowaida.todo.presentation
+package com.rowaida.todo.presentation.viewModel
 
 import android.app.Application
 import com.rowaida.todo.data.models.Note
@@ -7,7 +7,6 @@ import com.rowaida.todo.domain.useCases.UseCases
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 
 class NoteViewModel (application: Application, useCases: UseCases) :

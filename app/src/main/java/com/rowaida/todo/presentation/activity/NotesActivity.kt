@@ -1,12 +1,11 @@
-package com.rowaida.todo.presentation
+package com.rowaida.todo.presentation.activity
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
+import android.view.ViewGroup
+import android.widget.Button
 import android.widget.EditText
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -16,6 +15,11 @@ import com.rowaida.todo.R
 import com.rowaida.todo.data.models.Note
 import com.rowaida.todo.data.models.Status
 import com.rowaida.todo.framework.ToDoViewModelFactory
+import com.rowaida.todo.presentation.viewModel.NoteViewModel
+import com.rowaida.todo.presentation.adapter.NotesAdapter
+import com.rowaida.todo.utils.Constants
+import com.rowaida.todo.utils.Navigation
+import com.rowaida.todo.utils.SharedPreference
 import kotlinx.coroutines.runBlocking
 
 
@@ -25,18 +29,35 @@ class NotesActivity : AppCompatActivity() {
     private lateinit var noteViewModel: NoteViewModel
     private lateinit var notesAdapter : NotesAdapter
     private lateinit var notes : List<Note>
-
+    private lateinit var edittext: EditText
+    private lateinit var addNoteButton : Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_notes)
 
-        username = intent.getStringExtra("Username").toString()
+        initializeButton()
+
+        edittext = EditText(this.applicationContext)
+
+        username = intent.getStringExtra(Constants.username).toString()
 
         noteViewModel = ViewModelProvider(this, ToDoViewModelFactory)
             .get(NoteViewModel::class.java)
 
+        initializeAdapter()
 
+    }
+
+    private fun initializeButton() {
+        addNoteButton = findViewById(R.id.add_note_button)
+
+        addNoteButton.setOnClickListener {
+            addNote()
+        }
+    }
+
+    private fun initializeAdapter() {
         runBlocking {
             notes = noteViewModel.getNotes(username)
             notesAdapter = if (notes.isEmpty()) {
@@ -54,6 +75,16 @@ class NotesActivity : AppCompatActivity() {
         recyclerView.adapter = notesAdapter
     }
 
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        edittext.setText(savedInstanceState.getString(Constants.notesDraft, ""))
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(Constants.notesDraft, edittext.text.toString())
+    }
+
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val inflater = menuInflater
@@ -64,25 +95,22 @@ class NotesActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.logout_button -> {
-                startActivity(Intent(this, MainActivity::class.java))
+                SharedPreference(applicationContext).remove(Constants.login)
+                this.finish()
+                Navigation.goToActivity(null, this, MainActivity::class.java)
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
     }
 
-    fun addNote(v: View) {
+    fun addNote() {
         val alert = AlertDialog.Builder(this)
-        val edittext = EditText(this.applicationContext)
         alert.setMessage("Enter Your Note")
-        alert.setTitle("Add Note")
         alert.setView(edittext)
-
         alert.setPositiveButton(
-            "Save"
-        ) { dialog, whichButton -> //What ever you want to do with the value
-
-//            val note = edittext.text.toString()
+            Constants.save
+        ) { _, _ -> //What ever you want to do with the value
             //add note to database
             runBlocking {
                 noteViewModel.addNote(Note(
@@ -94,31 +122,20 @@ class NotesActivity : AppCompatActivity() {
                 notesAdapter.update(notes)
             }
 
+            edittext.setText("")
+
         }
 
         alert.setNegativeButton(
-            "Cancel"
+            Constants.cancel
         ) { dialog, _ ->
+            edittext.setText("")
             dialog.dismiss()
         }
-
-        alert.show()
-    }
-
-    fun deleteNote(note : Note) {
-        runBlocking {
-            noteViewModel.removeNote(Note(
-                id = note.id,
-                username = note.username,
-                note = note.note,
-                status = note.status
-            ))
-            notes = noteViewModel.getNotes(username)
-            notesAdapter.update(notes)
+        if(edittext.parent != null) {
+            (edittext.parent as ViewGroup).removeView(edittext)
         }
-    }
-
-    fun expandNote(v: View) {
+        alert.show()
     }
 
 }

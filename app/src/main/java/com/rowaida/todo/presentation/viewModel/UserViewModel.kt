@@ -1,11 +1,9 @@
-package com.rowaida.todo.presentation
+package com.rowaida.todo.presentation.viewModel
 
 import android.app.Application
 import com.rowaida.todo.data.models.User
 import com.rowaida.todo.framework.ToDoViewModel
 import com.rowaida.todo.domain.useCases.UseCases
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 class UserViewModel (application: Application, useCases: UseCases) :

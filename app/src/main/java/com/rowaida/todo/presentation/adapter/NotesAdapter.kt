@@ -1,4 +1,4 @@
-package com.rowaida.todo.presentation
+package com.rowaida.todo.presentation.adapter
 
 import android.view.*
 import android.view.LayoutInflater
@@ -11,11 +11,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.rowaida.todo.R
 import com.rowaida.todo.data.models.Note
 import com.rowaida.todo.data.models.Status
+import com.rowaida.todo.presentation.activity.NotesActivity
+import com.rowaida.todo.presentation.viewModel.NoteViewModel
+import com.rowaida.todo.utils.Constants
 import kotlinx.coroutines.runBlocking
 
 
 class NotesAdapter(private var notes: MutableList<Note>,
-                   val viewModel: NoteViewModel, val notesActivity: NotesActivity) :
+                   val viewModel: NoteViewModel, val notesActivity: NotesActivity
+) :
     RecyclerView.Adapter<NotesAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -24,6 +28,12 @@ class NotesAdapter(private var notes: MutableList<Note>,
         private val button: ImageButton = itemView.findViewById(R.id.delete_button)
 
         init {
+            initializeNote()
+            initializeStatus()
+            initializeDelete()
+        }
+
+        private fun initializeNote() {
             note.setOnClickListener {
                 val updateNote = notes[adapterPosition]
                 val alert = AlertDialog.Builder(notesActivity)
@@ -32,11 +42,10 @@ class NotesAdapter(private var notes: MutableList<Note>,
                 alert.setMessage("Edit Your Note")
                 alert.setView(edittext)
                 alert.setPositiveButton(
-                    "Update"
-                ) { dialog, whichButton -> //What ever you want to do with the value
+                    Constants.update
+                ) { _, _ -> //What ever you want to do with the value
 
                     runBlocking {
-//                        println("UPDATED NOTE: " + edittext.text.toString())
                         viewModel.updateNote(
                             Note(
                                 id = updateNote.id,
@@ -46,27 +55,21 @@ class NotesAdapter(private var notes: MutableList<Note>,
                             )
                         )
                     }
-                    runBlocking {
-                        val notesNonMutable = viewModel.getNotes(updateNote.username)
-                        notes = if (notesNonMutable.isEmpty()) {
-                            mutableListOf()
-                        } else {
-                            notesNonMutable as MutableList<Note>
-                        }
-//                    println("NOTES: $notes")
-                        notifyDataSetChanged()
-                    }
+                    getUpdatedNotes(updateNote.username)
 
                 }
 
                 alert.setNegativeButton(
-                    "Cancel"
+                    Constants.cancel
                 ) { dialog, _ ->
                     dialog.dismiss()
                 }
 
                 alert.show()
             }
+        }
+
+        private fun initializeStatus() {
             status.setOnClickListener {
                 val updateNote = notes[adapterPosition]
                 val updateStatus = if (status.isChecked) {
@@ -84,19 +87,12 @@ class NotesAdapter(private var notes: MutableList<Note>,
                         )
                     )
                 }
-                runBlocking {
-                    val notesNonMutable = viewModel.getNotes(updateNote.username)
-                    notes = if (notesNonMutable.isEmpty()) {
-                        mutableListOf()
-                    } else {
-                        notesNonMutable as MutableList<Note>
-                    }
-//                    println("NOTES: $notes")
-                    notifyDataSetChanged()
-                }
+                getUpdatedNotes(updateNote.username)
             }
+        }
+
+        private fun initializeDelete() {
             button.setOnClickListener {
-                //delete button clicked
                 val deleteNote = notes[adapterPosition]
                 val username = deleteNote.username
                 runBlocking {
@@ -109,19 +105,7 @@ class NotesAdapter(private var notes: MutableList<Note>,
                         )
                     )
                 }
-                runBlocking {
-                    val notesNonMutable = viewModel.getNotes(username)
-                    notes = if (notesNonMutable.isEmpty()) {
-                        mutableListOf()
-                    } else {
-                        notesNonMutable as MutableList<Note>
-                    }
-//                    println("NOTES: $notes")
-                    notifyDataSetChanged()
-                }
-
-
-//                println("DELETE BUTTON CLICKED")
+                getUpdatedNotes(username)
             }
         }
     }
@@ -157,6 +141,18 @@ class NotesAdapter(private var notes: MutableList<Note>,
         notes.clear()
         notes.addAll(updatedNotes)
         notifyDataSetChanged()
+    }
+
+    fun getUpdatedNotes(username: String) {
+        runBlocking {
+            val notesNonMutable = viewModel.getNotes(username)
+            notes = if (notesNonMutable.isEmpty()) {
+                mutableListOf()
+            } else {
+                notesNonMutable as MutableList<Note>
+            }
+            notifyDataSetChanged()
+        }
     }
 
 }

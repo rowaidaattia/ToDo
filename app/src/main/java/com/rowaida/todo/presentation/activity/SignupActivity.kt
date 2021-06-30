@@ -1,28 +1,32 @@
-package com.rowaida.todo.presentation
+package com.rowaida.todo.presentation.activity
 
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
-import android.content.Intent
-import android.database.sqlite.SQLiteConstraintException
 import android.os.Bundle
 import android.text.InputType
+import android.text.TextUtils
 import android.view.View
+import android.widget.Button
 import android.widget.EditText
 import android.widget.RadioButton
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.*
 import com.rowaida.todo.R
 import com.rowaida.todo.data.models.Gender
 import com.rowaida.todo.data.models.User
 import com.rowaida.todo.framework.ToDoViewModelFactory
+import com.rowaida.todo.presentation.viewModel.UserViewModel
+import com.rowaida.todo.utils.Navigation
+import com.rowaida.todo.utils.Toast
 import java.text.SimpleDateFormat
 import java.util.*
 
 
+@Suppress("NAME_SHADOWING")
 class SignupActivity : AppCompatActivity() {
 
     private lateinit var viewModel: UserViewModel
+    private lateinit var signupButton : Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,6 +35,21 @@ class SignupActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this, ToDoViewModelFactory)
                 .get(UserViewModel::class.java)
 
+        initializeButton()
+
+        initializeDatePicker()
+
+    }
+
+    private fun initializeButton() {
+        signupButton = findViewById(R.id.signup_button2)
+
+        signupButton.setOnClickListener {
+            signupClicked()
+        }
+    }
+
+    private fun initializeDatePicker() {
         val birthdayText: EditText? = findViewById(R.id.birthday)
         birthdayText?.inputType = InputType.TYPE_NULL
         birthdayText?.setOnClickListener(View.OnClickListener {
@@ -40,8 +59,9 @@ class SignupActivity : AppCompatActivity() {
             val year: Int = cldr.get(Calendar.YEAR)
 
             // date picker dialog
-            val picker: DatePickerDialog = DatePickerDialog(this,
-                { view, year, monthOfYear, dayOfMonth -> birthdayText.setText(dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + year) },
+            val picker = DatePickerDialog(this,
+                { _, year, monthOfYear, dayOfMonth ->
+                    birthdayText.setText(dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + year) },
                 year,
                 month,
                 day
@@ -51,7 +71,8 @@ class SignupActivity : AppCompatActivity() {
     }
 
     @SuppressLint("SimpleDateFormat")
-    fun goToNotes(v: View) {
+    private fun signupClicked() {
+
         val username = findViewById<EditText>(R.id.username_signup).text.toString()
         val password = findViewById<EditText>(R.id.password_signup).text.toString()
         val email = findViewById<EditText>(R.id.email_signup).text.toString()
@@ -59,37 +80,34 @@ class SignupActivity : AppCompatActivity() {
         val male = findViewById<RadioButton>(R.id.male).isChecked
         val female = findViewById<RadioButton>(R.id.female).isChecked
 
-        if (username.trim().isEmpty() || password.trim().isEmpty() ||
-            email.trim().isEmpty() || birthday.trim().isEmpty() ||
+        if (TextUtils.isEmpty(username) || TextUtils.isEmpty(password) ||
+            TextUtils.isEmpty(email) || TextUtils.isEmpty(birthday) ||
             !(male || female)) {
-            Toast.makeText(applicationContext,
-                "Please fill all fields fields",
-                Toast.LENGTH_LONG).show()
+                Toast.toast(applicationContext, R.string.missing_fields.toString())
         }
         else {
-//            Toast.makeText(applicationContext,
-//                "Username: $username, Password: $password",
-//                Toast.LENGTH_LONG).show()
-
             //add user
             val gender = if (male) Gender.MALE else Gender.FEMALE
             val date = SimpleDateFormat("dd/MM/yyyy").parse(birthday)
             val user = User(username, password, gender, email, date)
 
             if (viewModel.addUser(user).toInt() != -1) {
-                //go to notes activity
-                val intent = Intent(this, NotesActivity::class.java)
-                intent.putExtra("Username", username)
-                startActivity(intent)
+                Navigation.goToNotes(username, this)
             }
             else {
-                Toast.makeText(applicationContext,
-                    "Username or email already exists",
-                    Toast.LENGTH_LONG).show()
+                Toast.toast(applicationContext, R.string.exist_credentials.toString())
             }
 
         }
 
     }
+
+//    private fun goToNotes(username: String) {
+//        SharedPreference(applicationContext).writeString(Constants.login, username)
+//        val bundle = Bundle()
+//        bundle.putString(Constants.username, username)
+//        this.finish()
+//        Navigation.goToActivity(bundle, this, NotesActivity::class.java)
+//    }
 
 }
