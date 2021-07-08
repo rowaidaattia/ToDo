@@ -11,14 +11,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.rowaida.todo.R
 import com.rowaida.todo.data.models.Note
 import com.rowaida.todo.data.models.Status
-import com.rowaida.todo.presentation.activity.NotesActivity
+import com.rowaida.todo.presentation.activity.NotesAdminActivity
+import com.rowaida.todo.presentation.activity.NotesFragment
 import com.rowaida.todo.presentation.viewModel.NoteViewModel
 import com.rowaida.todo.utils.Constants
 import kotlinx.coroutines.runBlocking
 
 
-class NotesAdapter(private var notes: MutableList<Note>,
-                   val viewModel: NoteViewModel, val notesActivity: NotesActivity
+class NotesAdapter(private var notes: MutableList<Note>, val viewModel: NoteViewModel,
+                   val notesAdminActivity: NotesAdminActivity, val tabName: String?
 ) :
     RecyclerView.Adapter<NotesAdapter.ViewHolder>() {
 
@@ -36,8 +37,8 @@ class NotesAdapter(private var notes: MutableList<Note>,
         private fun initializeNote() {
             note.setOnClickListener {
                 val updateNote = notes[adapterPosition]
-                val alert = AlertDialog.Builder(notesActivity)
-                val edittext = EditText(notesActivity.applicationContext)
+                val alert = AlertDialog.Builder(notesAdminActivity)
+                val edittext = EditText(notesAdminActivity.applicationContext)
                 edittext.setText(updateNote.note)
                 alert.setMessage("Edit Your Note")
                 alert.setView(edittext)
@@ -51,11 +52,12 @@ class NotesAdapter(private var notes: MutableList<Note>,
                                 id = updateNote.id,
                                 username = updateNote.username,
                                 note = edittext.text.toString(),
-                                status = updateNote.status
+                                status = updateNote.status,
+                                owner = updateNote.username,
                             )
                         )
                     }
-                    getUpdatedNotes(updateNote.username)
+                    getUpdatedNotes(notesAdminActivity.username)
 
                 }
 
@@ -83,11 +85,13 @@ class NotesAdapter(private var notes: MutableList<Note>,
                             id = updateNote.id,
                             username = updateNote.username,
                             note = updateNote.note,
-                            status = updateStatus
+                            status = updateStatus,
+                            owner = updateNote.owner
                         )
                     )
                 }
-                getUpdatedNotes(updateNote.username)
+                getUpdatedNotes(notesAdminActivity.username)
+                notesAdminActivity.updateFragment(null, notes)
             }
         }
 
@@ -101,11 +105,13 @@ class NotesAdapter(private var notes: MutableList<Note>,
                             id = deleteNote.id,
                             username = deleteNote.username,
                             note = deleteNote.note,
-                            status = deleteNote.status
+                            status = deleteNote.status,
+                            owner = deleteNote.owner
                         )
                     )
                 }
-                getUpdatedNotes(username)
+                getUpdatedNotes(notesAdminActivity.username)
+                notesAdminActivity.updateFragment(null, notes)
             }
         }
     }
@@ -138,14 +144,20 @@ class NotesAdapter(private var notes: MutableList<Note>,
     override fun getItemCount() = notes.size
 
     fun update(updatedNotes: List<Note>) {
-        notes.clear()
-        notes.addAll(updatedNotes)
+        notes = updatedNotes as MutableList<Note>
         notifyDataSetChanged()
     }
 
     fun getUpdatedNotes(username: String) {
         runBlocking {
-            val notesNonMutable = viewModel.getNotes(username)
+            val notesNonMutable : List<Note> =
+                when (tabName) {
+                    "My Tasks" -> viewModel.getNotes(username)
+                    "Sub Accounts" -> viewModel.getSubAccountsNotes(username)
+                    "Assigned Tasks" -> viewModel.getAssignedNotes(username)
+                    else -> listOf()
+                }
+            //val notesNonMutable = viewModel.getNotes(username)
             notes = if (notesNonMutable.isEmpty()) {
                 mutableListOf()
             } else {

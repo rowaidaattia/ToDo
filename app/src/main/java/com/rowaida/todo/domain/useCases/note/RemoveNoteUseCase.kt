@@ -1,4 +1,4 @@
-package com.rowaida.todo.domain.useCases.Note
+package com.rowaida.todo.domain.useCases.note
 
 import com.rowaida.todo.data.repositories.NoteRepository
 import com.rowaida.todo.data.models.Note

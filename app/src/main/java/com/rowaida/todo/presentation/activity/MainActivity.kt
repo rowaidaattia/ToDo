@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
         if (login != null) {
             val bundle = Bundle()
             bundle.putString(Constants.username, login)
-            Navigation.goToActivity(bundle, this, NotesActivity::class.java)
+            Navigation.goToActivity(bundle, this, NotesAdminActivity::class.java)
 
         }
         else {

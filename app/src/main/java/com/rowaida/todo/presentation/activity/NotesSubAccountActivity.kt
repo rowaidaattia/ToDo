@@ -16,19 +16,18 @@ import com.rowaida.todo.data.models.Status
 import com.rowaida.todo.framework.ToDoViewModelFactory
 import com.rowaida.todo.presentation.adapter.ViewPagerAdapter
 import com.rowaida.todo.presentation.viewModel.NoteViewModel
-import com.rowaida.todo.presentation.viewModel.UserViewModel
 import com.rowaida.todo.utils.Constants
 import com.rowaida.todo.utils.Navigation
 import com.rowaida.todo.utils.SharedPreference
 import kotlinx.coroutines.runBlocking
 
 
-open class NotesActivity : AppCompatActivity() {
+class NotesSubAccountActivity : AppCompatActivity() {
 
-    lateinit var username : String
+    private lateinit var username : String
     private lateinit var edittext: EditText
     private lateinit var noteViewModel: NoteViewModel
-    private lateinit var userViewModel: UserViewModel
+    private lateinit var notes : List<Note>
     private lateinit var tabViewpager: ViewPager
     private lateinit var tabTablayout: TabLayout
 
@@ -41,9 +40,6 @@ open class NotesActivity : AppCompatActivity() {
 
         noteViewModel = ViewModelProvider(this, ToDoViewModelFactory)
             .get(NoteViewModel::class.java)
-
-        userViewModel = ViewModelProvider(this, ToDoViewModelFactory)
-            .get(UserViewModel::class.java)
 
         // Create the object of Toolbar, ViewPager and
         // TabLayout and use “findViewById()” method*/
@@ -70,13 +66,13 @@ open class NotesActivity : AppCompatActivity() {
 
         adapter.addFragment(myTasksFragment, "My Tasks")
 
-        val subAccountsFragment = NotesFragment()
-        val subAccountsBundle = Bundle()
-        subAccountsBundle.putString("TabName", "Sub Accounts")
-        subAccountsBundle.putString(Constants.username, username)
-        subAccountsFragment.arguments = subAccountsBundle
+        val assignedTasksFragment = NotesFragment()
+        val assignedTasksBundle = Bundle()
+        assignedTasksBundle.putString("TabName", "Assigned Tasks")
+        assignedTasksBundle.putString(Constants.username, username)
+        assignedTasksFragment.arguments = assignedTasksBundle
 
-        adapter.addFragment(subAccountsFragment, "Sub Accounts Tasks")
+        adapter.addFragment(assignedTasksFragment, "Assigned Tasks")
 
         // setting adapter to view pager.
         viewpager.adapter = adapter
@@ -100,118 +96,18 @@ open class NotesActivity : AppCompatActivity() {
                 addMyNote()
                 true
             }
-            R.id.assign_button -> {
-                assignNote()
-                true
-            }
-            R.id.add_account_button -> {
-                addAccount()
-                true
-            }
             else -> super.onOptionsItemSelected(item)
         }
     }
 
-    private fun assignNote() {
-        val alert = AlertDialog.Builder(this)
-        alert.setMessage("Enter Your Note")
-        alert.setView(edittext)
-        alert.setPositiveButton(
-            "Next"
-        ) { _, _ -> //What ever you want to do with the value
-            // setup the alert builder
-            val builder = AlertDialog.Builder(this)
-            builder.setTitle("Choose User")
-
-            // add a radio button list
-            val users = runBlocking {
-                userViewModel.getSubAccounts(username).toTypedArray()
-            }
-            var subAccount = users[0]
-            val checkedItem = 0
-            builder.setSingleChoiceItems(users, checkedItem) { dialog, which ->
-                // user checked an item
-                subAccount = users[which]
-            }
-
-            // add OK and Cancel buttons
-            builder.setPositiveButton("DONE") { dialog, which ->
-                // user clicked OK
-                runBlocking {
-                    noteViewModel.addNote(
-                        Note(
-                            username = subAccount,
-                            note = edittext.text.toString(),
-                            status = Status.IN_PROGRESS,
-                            owner = username
-                        ))
-                    updateFragment(1, noteViewModel.getSubAccountsNotes(username))
-                }
-                edittext.setText("")
-            }
-            builder.setNegativeButton("Cancel", null)
-
-            // create and show the alert dialog
-            val dialog = builder.create()
-            dialog.show()
-        }
-
-        alert.setNegativeButton(
-            Constants.cancel
-        ) { dialog, _ ->
-            edittext.setText("")
-            dialog.dismiss()
-        }
-        if(edittext.parent != null) {
-            (edittext.parent as ViewGroup).removeView(edittext)
-        }
-        alert.show()
-    }
-
-    private fun addAccount() {
-        // setup the alert builder
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("Choose User")
-
-        // add a radio button list
-        val users = runBlocking {
-            userViewModel.getAccounts(username).toTypedArray()
-        }
-        var subAccount = users[0]
-        val checkedItem = 0
-        builder.setSingleChoiceItems(users, checkedItem) { dialog, which ->
-            // user checked an item
-            subAccount = users[which]
-        }
-
-
-        // add OK and Cancel buttons
-        builder.setPositiveButton("OK") { dialog, which ->
-            // user clicked OK
-            userViewModel.addSubAccount(username, subAccount)
-        }
-        builder.setNegativeButton("Cancel", null)
-
-        // create and show the alert dialog
-        val dialog = builder.create()
-        dialog.show()
-
-    }
-
-    fun updateFragment(item: Int?, notes: List<Note>) {
-        var index = item
-        if (item == null) {
-            index = tabViewpager.currentItem
-        }
+    private fun updateFragment(item: Int) {
         val fragment =
             supportFragmentManager.findFragmentByTag(
-                "android:switcher:" + R.id.tab_viewpager.toString() + ":" + index
+                "android:switcher:" + R.id.tab_viewpager.toString() + ":" + item
             )
         // based on the current position you can then cast the page to the correct Fragment class and call some method inside that fragment to reload the data:
         if (null != fragment) {
-            //println("NOTES HERE: $notes")
             (fragment as NotesFragment).updateList(notes)
-            fragment.initializeProgressBar()
         }
     }
 
@@ -231,9 +127,10 @@ open class NotesActivity : AppCompatActivity() {
                     status = Status.IN_PROGRESS,
                     owner = username
                 ))
-                updateFragment(0, noteViewModel.getNotes(username))
+                notes = noteViewModel.getNotes(username)
             }
 
+            updateFragment(0)
 
             edittext.setText("")
 

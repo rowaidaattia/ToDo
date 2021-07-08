@@ -23,12 +23,13 @@ import com.rowaida.todo.utils.SharedPreference
 import kotlinx.coroutines.runBlocking
 
 
-open class NotesActivity : AppCompatActivity() {
+class NotesAdminActivity : AppCompatActivity() {
 
     lateinit var username : String
     private lateinit var edittext: EditText
     private lateinit var noteViewModel: NoteViewModel
     private lateinit var userViewModel: UserViewModel
+//    private lateinit var notes : List<Note>
     private lateinit var tabViewpager: ViewPager
     private lateinit var tabTablayout: TabLayout
 

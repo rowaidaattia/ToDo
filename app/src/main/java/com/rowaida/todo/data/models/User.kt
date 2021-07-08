@@ -8,5 +8,7 @@ data class User (
     val password: String,
     val gender: Gender,
     val email: String,
-    val birthday: Date
+    val birthday: Date,
+    val admin: String,
+    val accountType: AccountType
 )

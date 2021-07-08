@@ -2,6 +2,7 @@ package com.rowaida.todo.data.repositories
 
 import com.rowaida.todo.data.models.User
 import com.rowaida.todo.data.dataSource.UserDataSource
+import com.rowaida.todo.data.models.AccountType
 import com.rowaida.todo.domain.repositoryInterface.UserRepositoryInterface
 
 class UserRepository (private val userDataSource: UserDataSource) : UserRepositoryInterface {
@@ -14,5 +15,16 @@ class UserRepository (private val userDataSource: UserDataSource) : UserReposito
     override suspend fun getUsername(usernameOrEmail: String): String =
         userDataSource.get(usernameOrEmail)
 
+    override suspend fun addSubAccount(admin: String, subAccount: String) =
+        userDataSource.addSubAccount(admin, subAccount)
+
+    override suspend fun getSubAccounts(username: String): List<String> =
+        userDataSource.getSubAccounts(username)
+
+    override suspend fun getAccountType(username: String) : AccountType =
+        userDataSource.getAccountType(username)
+
+    override suspend fun getAccounts(username: String) : List<String> =
+        userDataSource.getAccounts(username)
 
 }

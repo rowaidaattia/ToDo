@@ -14,4 +14,10 @@ class NoteRepository (private val noteDataSource: NoteDataSource) : NoteReposito
 
     override suspend fun getNotes(username: String) : List<Note> = noteDataSource.get(username)
 
+    override suspend fun getAssignedNotes(username: String): List<Note> =
+        noteDataSource.getAssignedNotes(username)
+
+    override suspend fun getSubAccountsNotes(username: String): List<Note> =
+        noteDataSource.getSubAccountsNotes(username)
+
 }

@@ -16,7 +16,8 @@ class RoomNoteDataSource (context: Context) : NoteDataSource {
             note.id,
             note.username,
             note.note,
-            note.status.name
+            note.status.name,
+            note.owner
         ))
 
     override suspend fun remove(note: Note) =
@@ -25,7 +26,8 @@ class RoomNoteDataSource (context: Context) : NoteDataSource {
                 note.id,
                 note.username,
                 note.note,
-                note.status.name
+                note.status.name,
+                note.owner
             ))
 
     override suspend fun update(note: Note) =
@@ -34,7 +36,8 @@ class RoomNoteDataSource (context: Context) : NoteDataSource {
                 note.id,
                 note.username,
                 note.note,
-                note.status.name
+                note.status.name,
+                note.owner
             ))
 
     override suspend fun get(username: String): List<Note> {
@@ -45,16 +48,46 @@ class RoomNoteDataSource (context: Context) : NoteDataSource {
                     it.id,
                     it.username,
                     it.note,
-                    Status.valueOf(it.status)
+                    Status.valueOf(it.status),
+                    it.owner
                 )
             }
         }
-//        else {
-//            println("HERE: NOTES IS EMPTY")
-//            //return mutableListOf()
-//        }
-//        println("HERE: NOTES IS NOT EMPTY $notes")
         return notes
     }
+
+    override suspend fun getAssignedNotes(username: String): List<Note> {
+        var notes = listOf<Note>()
+        if (!userWithNotesDao.getAssignedNotes(username).isNullOrEmpty()) {
+            notes = userWithNotesDao.getAssignedNotes(username).first().notes.map {
+                Note(
+                    it.id,
+                    it.username,
+                    it.note,
+                    Status.valueOf(it.status),
+                    it.owner
+                )
+            }
+        }
+        return notes
+    }
+
+    override suspend fun getSubAccountsNotes(username: String): List<Note> {
+        var notes = listOf<Note>()
+        if (!userWithNotesDao.getSubAccountsNotes(username).isNullOrEmpty()) {
+            notes = userWithNotesDao.getSubAccountsNotes(username).first().notes.map {
+                Note(
+                    it.id,
+                    it.username,
+                    it.note,
+                    Status.valueOf(it.status),
+                    it.owner
+                )
+            }
+        }
+        println("SUBACCOUNT NOTES AT DATA SOURCE: $notes")
+        return notes
+    }
+
 
 }

@@ -7,6 +7,7 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.lifecycle.ViewModelProvider
 import com.rowaida.todo.R
+import com.rowaida.todo.data.models.AccountType
 import com.rowaida.todo.framework.ToDoViewModelFactory
 import com.rowaida.todo.presentation.viewModel.UserViewModel
 import com.rowaida.todo.utils.Navigation
@@ -41,16 +42,20 @@ class LoginActivity : AppCompatActivity() {
         val password = findViewById<EditText>(R.id.password_login).text.toString()
 
         if (TextUtils.isEmpty(usernameOrEmail) || TextUtils.isEmpty(password)) {
-            Toast.toast(applicationContext, R.string.missing_fields.toString())
+            Toast.toast(applicationContext, applicationContext.getString(R.string.missing_fields))
         }
 
         else {
             if (viewModel.checkUser(usernameOrEmail, password)) {
                 val username = viewModel.getUsername(usernameOrEmail)
-                Navigation.goToNotes(username, this)
+                when(viewModel.getAccountType(username)) {
+                    AccountType.ADMIN -> Navigation.goToNotesAdmin(username, this)
+                    //AccountType.SUB_ACCOUNT -> Navigation.goToNotesAdmin(username, this)
+                    else -> println("Invalid account type")
+                }
             }
             else {
-                Toast.toast(applicationContext, R.string.invalid_credentials.toString())
+                Toast.toast(applicationContext, applicationContext.getString(R.string.invalid_credentials))
             }
         }
     }

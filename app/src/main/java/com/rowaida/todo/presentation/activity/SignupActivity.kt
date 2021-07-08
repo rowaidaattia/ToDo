@@ -12,6 +12,7 @@ import android.widget.RadioButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.*
 import com.rowaida.todo.R
+import com.rowaida.todo.data.models.AccountType
 import com.rowaida.todo.data.models.Gender
 import com.rowaida.todo.data.models.User
 import com.rowaida.todo.framework.ToDoViewModelFactory
@@ -83,19 +84,19 @@ class SignupActivity : AppCompatActivity() {
         if (TextUtils.isEmpty(username) || TextUtils.isEmpty(password) ||
             TextUtils.isEmpty(email) || TextUtils.isEmpty(birthday) ||
             !(male || female)) {
-                Toast.toast(applicationContext, R.string.missing_fields.toString())
+                Toast.toast(applicationContext, applicationContext.getString(R.string.missing_fields))
         }
         else {
             //add user
             val gender = if (male) Gender.MALE else Gender.FEMALE
             val date = SimpleDateFormat("dd/MM/yyyy").parse(birthday)
-            val user = User(username, password, gender, email, date)
+            val user = User(username, password, gender, email, date, username, AccountType.ADMIN)
 
             if (viewModel.addUser(user).toInt() != -1) {
-                Navigation.goToNotes(username, this)
+                Navigation.goToNotesAdmin(username, this)
             }
             else {
-                Toast.toast(applicationContext, R.string.exist_credentials.toString())
+                Toast.toast(applicationContext, applicationContext.getString(R.string.exist_credentials))
             }
 
         }

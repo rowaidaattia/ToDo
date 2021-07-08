@@ -4,5 +4,6 @@ data class Note (
     val id: Int = 0,
     val username: String,
     val note: String,
-    val status: Status
+    val status: Status,
+    val owner: String
 )

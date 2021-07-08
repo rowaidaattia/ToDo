@@ -13,4 +13,8 @@ interface NoteRepositoryInterface {
 
     suspend fun getNotes(username: String) : List<Note>
 
+    suspend fun getAssignedNotes(username: String) : List<Note>
+
+    suspend fun getSubAccountsNotes(username: String) : List<Note>
+
 }

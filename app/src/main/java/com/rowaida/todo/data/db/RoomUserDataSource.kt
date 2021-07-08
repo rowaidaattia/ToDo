@@ -3,6 +3,8 @@ package com.rowaida.todo.data.db
 import android.content.Context
 import com.rowaida.todo.data.models.User
 import com.rowaida.todo.data.dataSource.UserDataSource
+import com.rowaida.todo.data.models.AccountType
+import com.rowaida.todo.data.models.Status
 
 class RoomUserDataSource (context: Context) : UserDataSource {
 
@@ -14,7 +16,9 @@ class RoomUserDataSource (context: Context) : UserDataSource {
             user.password,
             user.gender.name,
             user.email,
-            user.birthday.toString()
+            user.birthday.toString(),
+            user.admin,
+            user.accountType.toString()
         ))
 
     override suspend fun check(usernameOrEmail: String, password: String): Boolean =
@@ -22,5 +26,17 @@ class RoomUserDataSource (context: Context) : UserDataSource {
 
     override suspend fun get(usernameOrEmail: String): String =
         userDao.getUsername(usernameOrEmail)
+
+    override suspend fun addSubAccount(admin: String, subAccount: String) =
+        userDao.addSubAccount(admin, subAccount)
+
+    override suspend fun getSubAccounts(username: String): List<String> =
+        userDao.getSubAccounts(username)
+
+    override suspend fun getAccountType(username: String): AccountType =
+        AccountType.valueOf(userDao.getAccountType(username))
+
+    override suspend fun getAccounts(username: String): List<String> =
+        userDao.getAccounts(username)
 
 }

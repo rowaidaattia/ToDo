@@ -26,6 +26,22 @@ class NoteViewModel (application: Application, useCases: UseCases) :
 
     }
 
+    suspend fun getAssignedNotes(username: String) : List<Note> {
+        var notes = GlobalScope.async {
+            useCases.getAssignedNotesUseCase(username)
+        }
+        return notes.await()
+
+    }
+
+    suspend fun getSubAccountsNotes(username: String) : List<Note> {
+        var notes = GlobalScope.async {
+            useCases.getSubAccountsNotesUseCase(username)
+        }
+        return notes.await()
+
+    }
+
     fun removeNote(note: Note) {
         GlobalScope.launch {
             useCases.removeNoteUseCase(note)

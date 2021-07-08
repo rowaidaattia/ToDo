@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/add_button"
+        android:title="Add Task"/>
+
+    <item
+        android:id="@+id/assign_button"
+        android:title="Assign Task"/>
+
+    <item
+        android:id="@+id/add_account_button"
+        android:title="Add Sub Account"/>
+
+    <item
+        android:id="@+id/logout_button"
+        android:title="Logout"/>
+
+</menu>

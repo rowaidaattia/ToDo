@@ -1,18 +1,19 @@
 package com.rowaida.todo.domain.useCases
 
-import com.rowaida.todo.domain.useCases.Note.AddNoteUseCase
-import com.rowaida.todo.domain.useCases.Note.GetNotesUseCase
-import com.rowaida.todo.domain.useCases.Note.RemoveNoteUseCase
-import com.rowaida.todo.domain.useCases.Note.UpdateNoteUseCase
-import com.rowaida.todo.domain.useCases.User.AddUserUseCase
-import com.rowaida.todo.domain.useCases.User.CheckUserUseCase
-import com.rowaida.todo.domain.useCases.User.GetUsernameUseCase
+import com.rowaida.todo.domain.useCases.note.*
+import com.rowaida.todo.domain.useCases.user.*
 
 data class UseCases (
     val addNoteUseCase: AddNoteUseCase,
+    val addSubAccountUseCase: AddSubAccountUseCase,
     val addUserUseCase: AddUserUseCase,
     val checkUserUseCase: CheckUserUseCase,
+    val getAccountsUseCase: GetAccountsUseCase,
+    val getAccountTypeUseCase: GetAccountTypeUseCase,
+    val getAssignedNotesUseCase: GetAssignedNotesUseCase,
     val getNotesUseCase: GetNotesUseCase,
+    val getSubAccountsNotesUseCase: GetSubAccountsNotesUseCase,
+    val getSubAccountsUseCase: GetSubAccountsUseCase,
     val getUsernameUseCase: GetUsernameUseCase,
     val removeNoteUseCase: RemoveNoteUseCase,
     val updateNoteUseCase: UpdateNoteUseCase

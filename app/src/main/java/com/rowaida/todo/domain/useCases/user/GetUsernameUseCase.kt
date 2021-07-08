@@ -1,4 +1,4 @@
-package com.rowaida.todo.domain.useCases.User
+package com.rowaida.todo.domain.useCases.user
 
 import com.rowaida.todo.data.repositories.UserRepository
 

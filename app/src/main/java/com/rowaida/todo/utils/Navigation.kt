@@ -3,7 +3,7 @@ package com.rowaida.todo.utils
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import com.rowaida.todo.presentation.activity.NotesActivity
+import com.rowaida.todo.presentation.activity.NotesAdminActivity
 
 object Navigation {
 
@@ -15,11 +15,11 @@ object Navigation {
         context.startActivity(intent)
     }
 
-    fun goToNotes(username: String, context: Context) {
+    fun goToNotesAdmin(username: String, context: Context) {
         SharedPreference(context).writeString(Constants.login, username)
         val bundle = Bundle()
         bundle.putString(Constants.username, username)
-        goToActivity(bundle, context, NotesActivity::class.java)
+        goToActivity(bundle, context, NotesAdminActivity::class.java)
     }
 
 }
