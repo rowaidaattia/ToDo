@@ -49,9 +49,10 @@ class LoginActivity : AppCompatActivity() {
             if (viewModel.checkUser(usernameOrEmail, password)) {
                 val username = viewModel.getUsername(usernameOrEmail)
                 when(viewModel.getAccountType(username)) {
-                    AccountType.ADMIN -> Navigation.goToNotesAdmin(username, this)
-                    //AccountType.SUB_ACCOUNT -> Navigation.goToNotesAdmin(username, this)
-                    else -> println("Invalid account type")
+                    AccountType.ADMIN ->
+                        Navigation.goToNotes(username, AccountType.ADMIN.toString(), this, NotesAdminActivity::class.java)
+                    AccountType.SUB_ACCOUNT ->
+                        Navigation.goToNotes(username, AccountType.SUB_ACCOUNT.toString(), this, NotesSubAccountActivity::class.java)
                 }
             }
             else {

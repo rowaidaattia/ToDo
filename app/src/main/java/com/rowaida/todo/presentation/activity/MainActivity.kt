@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.rowaida.todo.R
+import com.rowaida.todo.data.models.AccountType
 import com.rowaida.todo.utils.Constants
 import com.rowaida.todo.utils.Navigation
 import com.rowaida.todo.utils.SharedPreference
@@ -16,12 +17,18 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val login = SharedPreference(applicationContext).getValue("LOGIN")
+        val login = SharedPreference(applicationContext).getValue(Constants.login)
+        val accountType = SharedPreference(applicationContext).getValue(Constants.accountType)
 
         if (login != null) {
             val bundle = Bundle()
             bundle.putString(Constants.username, login)
-            Navigation.goToActivity(bundle, this, NotesAdminActivity::class.java)
+            if (AccountType.ADMIN == accountType?.let { AccountType.valueOf(it) }) {
+                Navigation.goToActivity(bundle, this, NotesAdminActivity::class.java)
+            }
+            else {
+                Navigation.goToActivity(bundle, this, NotesSubAccountActivity::class.java)
+            }
 
         }
         else {

@@ -11,15 +11,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.rowaida.todo.R
 import com.rowaida.todo.data.models.Note
 import com.rowaida.todo.data.models.Status
+import com.rowaida.todo.presentation.activity.NotesActivity
 import com.rowaida.todo.presentation.activity.NotesAdminActivity
-import com.rowaida.todo.presentation.activity.NotesFragment
 import com.rowaida.todo.presentation.viewModel.NoteViewModel
 import com.rowaida.todo.utils.Constants
 import kotlinx.coroutines.runBlocking
 
 
 class NotesAdapter(private var notes: MutableList<Note>, val viewModel: NoteViewModel,
-                   val notesAdminActivity: NotesAdminActivity, val tabName: String?
+                   val notesActivity: NotesActivity, private val tabName: String?
 ) :
     RecyclerView.Adapter<NotesAdapter.ViewHolder>() {
 
@@ -37,10 +37,10 @@ class NotesAdapter(private var notes: MutableList<Note>, val viewModel: NoteView
         private fun initializeNote() {
             note.setOnClickListener {
                 val updateNote = notes[adapterPosition]
-                val alert = AlertDialog.Builder(notesAdminActivity)
-                val edittext = EditText(notesAdminActivity.applicationContext)
+                val alert = AlertDialog.Builder(notesActivity)
+                val edittext = EditText(notesActivity.applicationContext)
                 edittext.setText(updateNote.note)
-                alert.setMessage("Edit Your Note")
+                alert.setMessage(Constants.editNote)
                 alert.setView(edittext)
                 alert.setPositiveButton(
                     Constants.update
@@ -57,7 +57,7 @@ class NotesAdapter(private var notes: MutableList<Note>, val viewModel: NoteView
                             )
                         )
                     }
-                    getUpdatedNotes(notesAdminActivity.username)
+                    getUpdatedNotes(notesActivity.username)
 
                 }
 
@@ -90,8 +90,8 @@ class NotesAdapter(private var notes: MutableList<Note>, val viewModel: NoteView
                         )
                     )
                 }
-                getUpdatedNotes(notesAdminActivity.username)
-                notesAdminActivity.updateFragment(null, notes)
+                getUpdatedNotes(notesActivity.username)
+                notesActivity.updateFragment(null, notes)
             }
         }
 
@@ -110,8 +110,8 @@ class NotesAdapter(private var notes: MutableList<Note>, val viewModel: NoteView
                         )
                     )
                 }
-                getUpdatedNotes(notesAdminActivity.username)
-                notesAdminActivity.updateFragment(null, notes)
+                getUpdatedNotes(notesActivity.username)
+                notesActivity.updateFragment(null, notes)
             }
         }
     }
@@ -152,9 +152,9 @@ class NotesAdapter(private var notes: MutableList<Note>, val viewModel: NoteView
         runBlocking {
             val notesNonMutable : List<Note> =
                 when (tabName) {
-                    "My Tasks" -> viewModel.getNotes(username)
-                    "Sub Accounts" -> viewModel.getSubAccountsNotes(username)
-                    "Assigned Tasks" -> viewModel.getAssignedNotes(username)
+                    Constants.myTasks -> viewModel.getNotes(username)
+                    Constants.subAccountTasks -> viewModel.getSubAccountsNotes(username)
+                    Constants.assignedTasks -> viewModel.getAssignedNotes(username)
                     else -> listOf()
                 }
             //val notesNonMutable = viewModel.getNotes(username)

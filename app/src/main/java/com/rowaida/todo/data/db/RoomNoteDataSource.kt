@@ -53,6 +53,7 @@ class RoomNoteDataSource (context: Context) : NoteDataSource {
                 )
             }
         }
+        println("GET NOTES AT DATA SOURCE: $notes")
         return notes
     }
 
@@ -69,6 +70,7 @@ class RoomNoteDataSource (context: Context) : NoteDataSource {
                 )
             }
         }
+        println("ASSIGNED NOTES AT DATA SOURCE: $notes")
         return notes
     }
 

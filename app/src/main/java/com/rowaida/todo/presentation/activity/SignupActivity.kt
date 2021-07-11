@@ -93,7 +93,7 @@ class SignupActivity : AppCompatActivity() {
             val user = User(username, password, gender, email, date, username, AccountType.ADMIN)
 
             if (viewModel.addUser(user).toInt() != -1) {
-                Navigation.goToNotesAdmin(username, this)
+                Navigation.goToNotes(username, AccountType.ADMIN.toString(), this, NotesAdminActivity::class.java)
             }
             else {
                 Toast.toast(applicationContext, applicationContext.getString(R.string.exist_credentials))

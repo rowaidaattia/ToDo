@@ -66,29 +66,29 @@ class NotesFragment : Fragment() {
 
     private fun initializeList() {
         runBlocking {
-            when (arguments?.getString("TabName")) {
-                "My Tasks" -> {
+            when (arguments?.getString(Constants.tabName)) {
+                Constants.myTasks -> {
                     notes = noteViewModel.getNotes(username)
                 }
-                "Sub Accounts" -> {
+                Constants.subAccountTasks -> {
                     notes = noteViewModel.getSubAccountsNotes(username)
                 }
-                "Assigned Tasks" ->
+                Constants.assignedTasks ->
                     notes = noteViewModel.getAssignedNotes(username)
                 else -> println("Invalid Tab")
             }
 
-            println(arguments?.getString("TabName") + ", NOTES: " + notes.toString())
+            println(arguments?.getString(Constants.tabName) + ", NOTES: " + notes.toString())
         }
     }
 
     private fun initializeAdapter() {
 
         notesAdapter = if (notes.isEmpty()) {
-            NotesAdapter(mutableListOf(), noteViewModel, activity as NotesAdminActivity, arguments?.getString("TabName"))
+            NotesAdapter(mutableListOf(), noteViewModel, activity as NotesActivity, arguments?.getString(Constants.tabName))
         }
         else {
-            NotesAdapter(notes as MutableList<Note>, noteViewModel, activity as NotesAdminActivity, arguments?.getString("TabName"))
+            NotesAdapter(notes as MutableList<Note>, noteViewModel, activity as NotesActivity, arguments?.getString(Constants.tabName))
         }
 
         val recyclerView: RecyclerView = fragmentView.findViewById(R.id.notes_recycler_view)!!
