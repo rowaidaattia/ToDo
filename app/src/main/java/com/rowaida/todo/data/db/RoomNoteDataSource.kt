@@ -41,51 +41,81 @@ class RoomNoteDataSource (context: Context) : NoteDataSource {
             ))
 
     override suspend fun get(username: String): List<Note> {
-        var notes = listOf<Note>()
+        var notes = mutableListOf<Note>()
         if (!userWithNotesDao.getNotes(username).isNullOrEmpty()) {
-            notes = userWithNotesDao.getNotes(username).first().notes.map {
-                Note(
-                    it.id,
-                    it.username,
-                    it.note,
-                    Status.valueOf(it.status),
-                    it.owner
-                )
+            userWithNotesDao.getNotes(username).forEach { userWithNotes ->
+                notes.add(Note(
+                    userWithNotes.note.id,
+                    userWithNotes.note.username,
+                    userWithNotes.note.note,
+                    Status.valueOf(userWithNotes.note.status),
+                    userWithNotes.note.owner
+                ))
+                userWithNotes.note
             }
+//            notes = userWithNotesDao.getNotes(username).first().notes.map {
+//                Note(
+//                    it.id,
+//                    it.username,
+//                    it.note,
+//                    Status.valueOf(it.status),
+//                    it.owner
+//                )
+//            }
         }
         println("GET NOTES AT DATA SOURCE: $notes")
         return notes
     }
 
     override suspend fun getAssignedNotes(username: String): List<Note> {
-        var notes = listOf<Note>()
+        var notes = mutableListOf<Note>()
         if (!userWithNotesDao.getAssignedNotes(username).isNullOrEmpty()) {
-            notes = userWithNotesDao.getAssignedNotes(username).first().notes.map {
-                Note(
-                    it.id,
-                    it.username,
-                    it.note,
-                    Status.valueOf(it.status),
-                    it.owner
-                )
+            userWithNotesDao.getAssignedNotes(username).forEach { userWithNotes ->
+                notes.add(Note(
+                    userWithNotes.note.id,
+                    userWithNotes.note.username,
+                    userWithNotes.note.note,
+                    Status.valueOf(userWithNotes.note.status),
+                    userWithNotes.note.owner
+                ))
+                userWithNotes.note
             }
+//            notes = userWithNotesDao.getAssignedNotes(username).first().notes.map {
+//                Note(
+//                    it.id,
+//                    it.username,
+//                    it.note,
+//                    Status.valueOf(it.status),
+//                    it.owner
+//                )
+//            }
         }
         println("ASSIGNED NOTES AT DATA SOURCE: $notes")
         return notes
     }
 
     override suspend fun getSubAccountsNotes(username: String): List<Note> {
-        var notes = listOf<Note>()
+        var notes = mutableListOf<Note>()
         if (!userWithNotesDao.getSubAccountsNotes(username).isNullOrEmpty()) {
-            notes = userWithNotesDao.getSubAccountsNotes(username).first().notes.map {
-                Note(
-                    it.id,
-                    it.username,
-                    it.note,
-                    Status.valueOf(it.status),
-                    it.owner
-                )
+            userWithNotesDao.getSubAccountsNotes(username).forEach { userWithNotes ->
+                notes.add(Note(
+                    userWithNotes.note.id,
+                    userWithNotes.note.username,
+                    userWithNotes.note.note,
+                    Status.valueOf(userWithNotes.note.status),
+                    userWithNotes.note.owner
+                ))
+                userWithNotes.note
             }
+//            notes = userWithNotesDao.getSubAccountsNotes(username).first().notes.map {
+//                Note(
+//                    it.id,
+//                    it.username,
+//                    it.note,
+//                    Status.valueOf(it.status),
+//                    it.owner
+//                )
+//            }
         }
         println("SUBACCOUNT NOTES AT DATA SOURCE: $notes")
         return notes

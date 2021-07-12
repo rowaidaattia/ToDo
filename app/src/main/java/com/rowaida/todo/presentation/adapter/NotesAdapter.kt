@@ -11,63 +11,35 @@ import androidx.recyclerview.widget.RecyclerView
 import com.rowaida.todo.R
 import com.rowaida.todo.data.models.Note
 import com.rowaida.todo.data.models.Status
-import com.rowaida.todo.presentation.activity.NotesActivity
-import com.rowaida.todo.presentation.activity.NotesAdminActivity
+import com.rowaida.todo.presentation.activity.NotesInterface
 import com.rowaida.todo.presentation.viewModel.NoteViewModel
 import com.rowaida.todo.utils.Constants
+import com.rowaida.todo.utils.Toast
 import kotlinx.coroutines.runBlocking
 
 
 class NotesAdapter(private var notes: MutableList<Note>, val viewModel: NoteViewModel,
-                   val notesActivity: NotesActivity, private val tabName: String?
+                   val notesInterface: NotesInterface, private val tabName: String?, private val username: String
 ) :
     RecyclerView.Adapter<NotesAdapter.ViewHolder>() {
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val status: CheckBox = itemView.findViewById(R.id.note_status)
         val note: TextView = itemView.findViewById(R.id.note_text)
-        private val button: ImageButton = itemView.findViewById(R.id.delete_button)
+        private val editButton: ImageButton = itemView.findViewById(R.id.edit_button)
+        private val deleteButton: ImageButton = itemView.findViewById(R.id.delete_button)
 
         init {
-            initializeNote()
+            //initializeNote()
             initializeStatus()
+            initializeEdit()
             initializeDelete()
         }
 
-        private fun initializeNote() {
-            note.setOnClickListener {
+        private fun initializeEdit() {
+            editButton.setOnClickListener {
                 val updateNote = notes[adapterPosition]
-                val alert = AlertDialog.Builder(notesActivity)
-                val edittext = EditText(notesActivity.applicationContext)
-                edittext.setText(updateNote.note)
-                alert.setMessage(Constants.editNote)
-                alert.setView(edittext)
-                alert.setPositiveButton(
-                    Constants.update
-                ) { _, _ -> //What ever you want to do with the value
-
-                    runBlocking {
-                        viewModel.updateNote(
-                            Note(
-                                id = updateNote.id,
-                                username = updateNote.username,
-                                note = edittext.text.toString(),
-                                status = updateNote.status,
-                                owner = updateNote.username,
-                            )
-                        )
-                    }
-                    getUpdatedNotes(notesActivity.username)
-
-                }
-
-                alert.setNegativeButton(
-                    Constants.cancel
-                ) { dialog, _ ->
-                    dialog.dismiss()
-                }
-
-                alert.show()
+                notesInterface.editNote(updateNote)
             }
         }
 
@@ -90,13 +62,13 @@ class NotesAdapter(private var notes: MutableList<Note>, val viewModel: NoteView
                         )
                     )
                 }
-                getUpdatedNotes(notesActivity.username)
-                notesActivity.updateFragment(null, notes)
+                getUpdatedNotes(username)
+                notesInterface.updateFragment(null, notes)
             }
         }
 
         private fun initializeDelete() {
-            button.setOnClickListener {
+            deleteButton.setOnClickListener {
                 val deleteNote = notes[adapterPosition]
                 val username = deleteNote.username
                 runBlocking {
@@ -110,8 +82,8 @@ class NotesAdapter(private var notes: MutableList<Note>, val viewModel: NoteView
                         )
                     )
                 }
-                getUpdatedNotes(notesActivity.username)
-                notesActivity.updateFragment(null, notes)
+                getUpdatedNotes(username)
+                notesInterface.updateFragment(null, notes)
             }
         }
     }

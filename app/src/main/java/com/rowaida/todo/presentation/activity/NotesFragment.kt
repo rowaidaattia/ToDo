@@ -84,11 +84,12 @@ class NotesFragment : Fragment() {
 
     private fun initializeAdapter() {
 
+        //val activity = (activity as NotesActivity)
         notesAdapter = if (notes.isEmpty()) {
-            NotesAdapter(mutableListOf(), noteViewModel, activity as NotesActivity, arguments?.getString(Constants.tabName))
+            NotesAdapter(mutableListOf(), noteViewModel, activity as NotesActivity, arguments?.getString(Constants.tabName), username)
         }
         else {
-            NotesAdapter(notes as MutableList<Note>, noteViewModel, activity as NotesActivity, arguments?.getString(Constants.tabName))
+            NotesAdapter(notes as MutableList<Note>, noteViewModel, activity as NotesActivity, arguments?.getString(Constants.tabName), username)
         }
 
         val recyclerView: RecyclerView = fragmentView.findViewById(R.id.notes_recycler_view)!!

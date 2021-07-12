@@ -15,7 +15,7 @@ interface UserWithNotesDao {
     fun getAssignedNotes(username: String): List<UserWithNotes>
 
     @Transaction
-    @Query("SELECT * FROM Note WHERE owner = :username AND username <> :username")
+    @Query("SELECT * FROM Note WHERE username <> :username AND owner = :username")
     fun getSubAccountsNotes(username: String): List<UserWithNotes>
 
 

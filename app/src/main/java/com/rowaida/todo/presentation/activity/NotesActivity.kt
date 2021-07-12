@@ -21,7 +21,7 @@ import com.rowaida.todo.utils.SharedPreference
 import kotlinx.coroutines.runBlocking
 
 
-open class NotesActivity : AppCompatActivity() {
+open class NotesActivity : AppCompatActivity(), NotesInterface {
 
     lateinit var username : String
     lateinit var edittext: EditText
@@ -73,7 +73,7 @@ open class NotesActivity : AppCompatActivity() {
         viewpager.adapter = adapter
     }
 
-    fun updateFragment(item: Int?, notes: List<Note>) {
+    override fun updateFragment(item: Int?, notes: List<Note>) {
         var index = item
         if (item == null) {
             index = tabViewpager.currentItem
@@ -88,6 +88,40 @@ open class NotesActivity : AppCompatActivity() {
             (fragment as NotesFragment).updateList(notes)
             fragment.initializeProgressBar()
         }
+    }
+
+    override fun editNote(updateNote: Note) {
+        val alert = AlertDialog.Builder(this)
+        val edittext = EditText(applicationContext)
+        edittext.setText(updateNote.note)
+        alert.setMessage(Constants.editNote)
+        alert.setView(edittext)
+        alert.setPositiveButton(
+            Constants.update
+        ) { _, _ -> //What ever you want to do with the value
+
+            runBlocking {
+                noteViewModel.updateNote(
+                    Note(
+                        id = updateNote.id,
+                        username = updateNote.username,
+                        note = edittext.text.toString(),
+                        status = updateNote.status,
+                        owner = updateNote.username,
+                    )
+                )
+                updateFragment(0, noteViewModel.getNotes(username))
+            }
+
+        }
+
+        alert.setNegativeButton(
+            Constants.cancel
+        ) { dialog, _ ->
+            dialog.dismiss()
+        }
+
+        alert.show()
     }
 
     fun logout() {
