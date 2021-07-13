@@ -10,8 +10,8 @@ import com.rowaida.todo.R
 import com.rowaida.todo.data.models.AccountType
 import com.rowaida.todo.framework.ToDoViewModelFactory
 import com.rowaida.todo.presentation.viewModel.UserViewModel
-import com.rowaida.todo.utils.Navigation
-import com.rowaida.todo.utils.Toast
+import com.rowaida.todo.utils.ToDoNavigation
+import com.rowaida.todo.utils.ToDoToast
 
 class LoginActivity : AppCompatActivity() {
 
@@ -42,7 +42,7 @@ class LoginActivity : AppCompatActivity() {
         val password = findViewById<EditText>(R.id.password_login).text.toString()
 
         if (TextUtils.isEmpty(usernameOrEmail) || TextUtils.isEmpty(password)) {
-            Toast.toast(applicationContext, applicationContext.getString(R.string.missing_fields))
+            ToDoToast.toast(applicationContext, applicationContext.getString(R.string.missing_fields))
         }
 
         else {
@@ -50,13 +50,13 @@ class LoginActivity : AppCompatActivity() {
                 val username = viewModel.getUsername(usernameOrEmail)
                 when(viewModel.getAccountType(username)) {
                     AccountType.ADMIN ->
-                        Navigation.goToNotes(username, AccountType.ADMIN.toString(), this, NotesAdminActivity::class.java)
+                        ToDoNavigation.goToNotes(username, AccountType.ADMIN.toString(), this, NotesAdminActivity::class.java)
                     AccountType.SUB_ACCOUNT ->
-                        Navigation.goToNotes(username, AccountType.SUB_ACCOUNT.toString(), this, NotesSubAccountActivity::class.java)
+                        ToDoNavigation.goToNotes(username, AccountType.SUB_ACCOUNT.toString(), this, NotesSubAccountActivity::class.java)
                 }
             }
             else {
-                Toast.toast(applicationContext, applicationContext.getString(R.string.invalid_credentials))
+                ToDoToast.toast(applicationContext, applicationContext.getString(R.string.invalid_credentials))
             }
         }
     }

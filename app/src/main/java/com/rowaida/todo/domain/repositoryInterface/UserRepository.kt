@@ -4,7 +4,7 @@ import com.rowaida.todo.data.models.AccountType
 import com.rowaida.todo.data.models.Note
 import com.rowaida.todo.data.models.User
 
-interface UserRepositoryInterface {
+interface UserRepository {
 
     suspend fun addUser(user: User) : Long
 

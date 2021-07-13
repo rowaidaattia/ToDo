@@ -2,7 +2,7 @@ package com.rowaida.todo.utils
 
 import android.content.Context
 
-class SharedPreference(applicationContext: Context) {
+class ToDoSharedPreference(applicationContext: Context) {
 
     private val sharedPref = applicationContext.getSharedPreferences(
         "com.rowaida.todo.PREFERENCE_FILE_KEY", Context.MODE_PRIVATE

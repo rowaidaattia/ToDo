@@ -15,6 +15,10 @@
         android:title="Add Sub Account"/>
 
     <item
+        android:id="@+id/delete_admin_button"
+        android:title="Delete Notes"/>
+
+    <item
         android:id="@+id/logout_admin_button"
         android:title="Logout"/>
 

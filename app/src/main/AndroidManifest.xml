@@ -21,6 +21,7 @@
         <activity android:name=".presentation.activity.SignupActivity" />
         <activity android:name=".presentation.activity.NotesAdminActivity"/>
         <activity android:name=".presentation.activity.NotesSubAccountActivity"/>
+        <service android:name=".presentation.activity.ToDoService" />
     </application>
 
 </manifest>

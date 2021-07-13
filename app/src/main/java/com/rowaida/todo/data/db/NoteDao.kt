@@ -14,4 +14,7 @@ interface NoteDao {
     @Update
     fun updateNote(note: NoteEntity)
 
+    @Query("DELETE FROM Note WHERE owner = :username")
+    fun deleteAllNotes(username: String)
+
 }

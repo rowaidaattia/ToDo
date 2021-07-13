@@ -15,9 +15,11 @@ import com.rowaida.todo.framework.ToDoViewModelFactory
 import com.rowaida.todo.presentation.adapter.ViewPagerAdapter
 import com.rowaida.todo.presentation.viewModel.NoteViewModel
 import com.rowaida.todo.presentation.viewModel.UserViewModel
-import com.rowaida.todo.utils.Constants
-import com.rowaida.todo.utils.Navigation
-import com.rowaida.todo.utils.SharedPreference
+import com.rowaida.todo.utils.ToDoConstants
+import com.rowaida.todo.utils.ToDoNavigation
+import com.rowaida.todo.utils.ToDoSharedPreference
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 
@@ -34,7 +36,7 @@ open class NotesActivity : AppCompatActivity(), NotesInterface {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_notes)
 
-        username = intent.getStringExtra(Constants.username).toString()
+        username = intent.getStringExtra(ToDoConstants.username).toString()
         edittext = EditText(applicationContext)
 
         noteViewModel = ViewModelProvider(this, ToDoViewModelFactory)
@@ -58,8 +60,8 @@ open class NotesActivity : AppCompatActivity(), NotesInterface {
     fun createFragment(tabName: String) : NotesFragment {
         val fragment = NotesFragment()
         val bundle = Bundle()
-        bundle.putString(Constants.tabName, tabName)
-        bundle.putString(Constants.username, username)
+        bundle.putString(ToDoConstants.tabName, tabName)
+        bundle.putString(ToDoConstants.username, username)
         fragment.arguments = bundle
         return fragment
     }
@@ -94,10 +96,10 @@ open class NotesActivity : AppCompatActivity(), NotesInterface {
         val alert = AlertDialog.Builder(this)
         val edittext = EditText(applicationContext)
         edittext.setText(updateNote.note)
-        alert.setMessage(Constants.editNote)
+        alert.setMessage(getString(R.string.editNote))
         alert.setView(edittext)
         alert.setPositiveButton(
-            Constants.update
+            getString(R.string.update)
         ) { _, _ -> //What ever you want to do with the value
 
             runBlocking {
@@ -116,7 +118,7 @@ open class NotesActivity : AppCompatActivity(), NotesInterface {
         }
 
         alert.setNegativeButton(
-            Constants.cancel
+            getString(R.string.cancel)
         ) { dialog, _ ->
             dialog.dismiss()
         }
@@ -125,17 +127,17 @@ open class NotesActivity : AppCompatActivity(), NotesInterface {
     }
 
     fun logout() {
-        SharedPreference(applicationContext).remove(Constants.login)
+        ToDoSharedPreference(applicationContext).remove(ToDoConstants.login)
         this.finish()
-        Navigation.goToActivity(null, this, MainActivity::class.java)
+        ToDoNavigation.goToActivity(null, this, MainActivity::class.java)
     }
 
     fun addMyNote() {
         val alert = AlertDialog.Builder(this)
-        alert.setMessage(Constants.enterNote)
+        alert.setMessage(getString(R.string.enterNote))
         alert.setView(edittext)
         alert.setPositiveButton(
-            Constants.save
+            getString(R.string.save)
         ) { _, _ -> //What ever you want to do with the value
             //add note to database
             runBlocking {
@@ -155,7 +157,7 @@ open class NotesActivity : AppCompatActivity(), NotesInterface {
         }
 
         alert.setNegativeButton(
-            Constants.cancel
+            getString(R.string.cancel)
         ) { dialog, _ ->
             edittext.setText("")
             dialog.dismiss()
@@ -164,6 +166,12 @@ open class NotesActivity : AppCompatActivity(), NotesInterface {
             (edittext.parent as ViewGroup).removeView(edittext)
         }
         alert.show()
+    }
+
+    fun deleteAllNotes() {
+        GlobalScope.launch {
+            noteViewModel.deleteAllNotes(username)
+        }
     }
 }
 

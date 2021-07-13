@@ -18,4 +18,16 @@
     <string name="invalid_credentials">Incorrect login credentials</string>
     <string name="missing_fields">Please fill all fields</string>
     <string name="exist_credentials">Credentials already exist</string>
+    <string name="cancel">cancel</string>
+    <string name="save">save</string>
+    <string name="update">update</string>
+    <string name="myTasks">My Tasks</string>
+    <string name="subAccountTasks">Sub Accounts Tasks</string>
+    <string name="assignedTasks">Assigned Tasks</string>
+    <string name="done">done</string>
+    <string name="ok">ok</string>
+    <string name="next">next</string>
+    <string name="enterNote">Enter Note</string>
+    <string name="editNote">Edit Note</string>
+    <string name="chooseUser">Choose User</string>
 </resources>

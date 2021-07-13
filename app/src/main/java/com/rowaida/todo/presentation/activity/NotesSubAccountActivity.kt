@@ -5,14 +5,13 @@ import android.view.MenuItem
 import androidx.viewpager.widget.ViewPager
 import com.rowaida.todo.R
 import com.rowaida.todo.presentation.adapter.ViewPagerAdapter
-import com.rowaida.todo.utils.Constants
 
 class NotesSubAccountActivity : NotesActivity() {
 
     override fun setupViewPager(viewpager: ViewPager) {
         val adapter = ViewPagerAdapter(supportFragmentManager)
-        adapter.addFragment(createFragment(Constants.myTasks), Constants.myTasks)
-        adapter.addFragment(createFragment(Constants.assignedTasks), Constants.assignedTasks)
+        adapter.addFragment(createFragment(getString(R.string.myTasks)), getString(R.string.myTasks))
+        adapter.addFragment(createFragment(getString(R.string.assignedTasks)), getString(R.string.assignedTasks))
         // setting adapter to view pager.
         viewpager.adapter = adapter
     }
@@ -31,6 +30,10 @@ class NotesSubAccountActivity : NotesActivity() {
             }
             R.id.add_subaccount_button -> {
                 addMyNote()
+                true
+            }
+            R.id.delete_subaccount_button -> {
+                deleteAllNotes()
                 true
             }
             else -> super.onOptionsItemSelected(item)

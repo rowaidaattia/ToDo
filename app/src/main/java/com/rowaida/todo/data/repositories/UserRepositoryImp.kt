@@ -3,9 +3,10 @@ package com.rowaida.todo.data.repositories
 import com.rowaida.todo.data.models.User
 import com.rowaida.todo.data.dataSource.UserDataSource
 import com.rowaida.todo.data.models.AccountType
-import com.rowaida.todo.domain.repositoryInterface.UserRepositoryInterface
+import com.rowaida.todo.domain.repositoryInterface.UserRepository
 
-class UserRepository (private val userDataSource: UserDataSource) : UserRepositoryInterface {
+class UserRepositoryImp (private val userDataSource: UserDataSource) :
+    UserRepository {
 
     override suspend fun addUser(user: User) : Long = userDataSource.add(user)
 

@@ -3,10 +3,8 @@ package com.rowaida.todo.utils
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import com.rowaida.todo.presentation.activity.NotesActivity
-import com.rowaida.todo.presentation.activity.NotesAdminActivity
 
-object Navigation {
+object ToDoNavigation {
 
     fun goToActivity(bundle: Bundle?, context: Context, activityClass: Class<*>) {
         val intent = Intent(context, activityClass)
@@ -17,10 +15,10 @@ object Navigation {
     }
 
     fun goToNotes(username: String, accountType: String, context: Context, notesActivity: Class<*>) {
-        SharedPreference(context).writeString(Constants.login, username)
-        SharedPreference(context).writeString(Constants.accountType, accountType)
+        ToDoSharedPreference(context).writeString(ToDoConstants.login, username)
+        ToDoSharedPreference(context).writeString(ToDoConstants.accountType, accountType)
         val bundle = Bundle()
-        bundle.putString(Constants.username, username)
+        bundle.putString(ToDoConstants.username, username)
         goToActivity(bundle, context, notesActivity)
     }
 

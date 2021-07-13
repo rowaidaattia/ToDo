@@ -2,9 +2,10 @@ package com.rowaida.todo.data.repositories
 
 import com.rowaida.todo.data.models.Note
 import com.rowaida.todo.data.dataSource.NoteDataSource
-import com.rowaida.todo.domain.repositoryInterface.NoteRepositoryInterface
+import com.rowaida.todo.domain.repositoryInterface.NoteRepository
 
-class NoteRepository (private val noteDataSource: NoteDataSource) : NoteRepositoryInterface {
+class NoteRepositoryImp (private val noteDataSource: NoteDataSource) :
+    NoteRepository {
 
     override suspend fun addNote(note: Note) = noteDataSource.add(note)
 
@@ -19,5 +20,8 @@ class NoteRepository (private val noteDataSource: NoteDataSource) : NoteReposito
 
     override suspend fun getSubAccountsNotes(username: String): List<Note> =
         noteDataSource.getSubAccountsNotes(username)
+
+    override fun deleteAllNotes(username: String) =
+        noteDataSource.deleteAllNotes(username)
 
 }

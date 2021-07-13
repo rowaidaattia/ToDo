@@ -17,8 +17,8 @@ import com.rowaida.todo.data.models.Gender
 import com.rowaida.todo.data.models.User
 import com.rowaida.todo.framework.ToDoViewModelFactory
 import com.rowaida.todo.presentation.viewModel.UserViewModel
-import com.rowaida.todo.utils.Navigation
-import com.rowaida.todo.utils.Toast
+import com.rowaida.todo.utils.ToDoNavigation
+import com.rowaida.todo.utils.ToDoToast
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -84,7 +84,7 @@ class SignupActivity : AppCompatActivity() {
         if (TextUtils.isEmpty(username) || TextUtils.isEmpty(password) ||
             TextUtils.isEmpty(email) || TextUtils.isEmpty(birthday) ||
             !(male || female)) {
-                Toast.toast(applicationContext, applicationContext.getString(R.string.missing_fields))
+                ToDoToast.toast(applicationContext, applicationContext.getString(R.string.missing_fields))
         }
         else {
             //add user
@@ -93,10 +93,10 @@ class SignupActivity : AppCompatActivity() {
             val user = User(username, password, gender, email, date, username, AccountType.ADMIN)
 
             if (viewModel.addUser(user).toInt() != -1) {
-                Navigation.goToNotes(username, AccountType.ADMIN.toString(), this, NotesAdminActivity::class.java)
+                ToDoNavigation.goToNotes(username, AccountType.ADMIN.toString(), this, NotesAdminActivity::class.java)
             }
             else {
-                Toast.toast(applicationContext, applicationContext.getString(R.string.exist_credentials))
+                ToDoToast.toast(applicationContext, applicationContext.getString(R.string.exist_credentials))
             }
 
         }

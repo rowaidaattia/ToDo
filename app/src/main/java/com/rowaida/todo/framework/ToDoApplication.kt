@@ -12,8 +12,8 @@ class ToDoApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        val userRepository = UserRepository(RoomUserDataSource(this))
-        val noteRepository = NoteRepository(RoomNoteDataSource(this))
+        val userRepository = UserRepositoryImp(RoomUserDataSource(this))
+        val noteRepository = NoteRepositoryImp(RoomNoteDataSource(this))
 
         ToDoViewModelFactory.inject(
             this,
@@ -22,6 +22,7 @@ class ToDoApplication : Application() {
                 AddSubAccountUseCase(userRepository),
                 AddUserUseCase(userRepository),
                 CheckUserUseCase(userRepository),
+                DeleteAllNotesUseCase(noteRepository),
                 GetAccountsUseCase(userRepository),
                 GetAccountTypeUseCase(userRepository),
                 GetAssignedNotesUseCase(noteRepository),

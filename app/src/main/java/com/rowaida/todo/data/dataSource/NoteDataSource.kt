@@ -15,4 +15,6 @@ interface NoteDataSource {
     suspend fun getAssignedNotes(username: String) : List<Note>
 
     suspend fun getSubAccountsNotes(username: String) : List<Note>
+
+    fun deleteAllNotes(username: String)
 }

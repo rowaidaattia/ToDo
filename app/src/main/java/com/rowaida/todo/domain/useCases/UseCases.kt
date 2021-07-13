@@ -8,6 +8,7 @@ data class UseCases (
     val addSubAccountUseCase: AddSubAccountUseCase,
     val addUserUseCase: AddUserUseCase,
     val checkUserUseCase: CheckUserUseCase,
+    val deleteAllNotesUseCase: DeleteAllNotesUseCase,
     val getAccountsUseCase: GetAccountsUseCase,
     val getAccountTypeUseCase: GetAccountTypeUseCase,
     val getAssignedNotesUseCase: GetAssignedNotesUseCase,

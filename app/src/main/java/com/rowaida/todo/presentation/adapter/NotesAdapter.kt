@@ -1,20 +1,17 @@
 package com.rowaida.todo.presentation.adapter
 
+import android.content.res.Resources
 import android.view.*
 import android.view.LayoutInflater
 import android.widget.CheckBox
-import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
-import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.rowaida.todo.R
 import com.rowaida.todo.data.models.Note
 import com.rowaida.todo.data.models.Status
 import com.rowaida.todo.presentation.activity.NotesInterface
 import com.rowaida.todo.presentation.viewModel.NoteViewModel
-import com.rowaida.todo.utils.Constants
-import com.rowaida.todo.utils.Toast
 import kotlinx.coroutines.runBlocking
 
 
@@ -124,9 +121,9 @@ class NotesAdapter(private var notes: MutableList<Note>, val viewModel: NoteView
         runBlocking {
             val notesNonMutable : List<Note> =
                 when (tabName) {
-                    Constants.myTasks -> viewModel.getNotes(username)
-                    Constants.subAccountTasks -> viewModel.getSubAccountsNotes(username)
-                    Constants.assignedTasks -> viewModel.getAssignedNotes(username)
+                    Resources.getSystem().getString(R.string.myTasks) -> viewModel.getNotes(username)
+                    Resources.getSystem().getString(R.string.subAccountTasks) -> viewModel.getSubAccountsNotes(username)
+                    Resources.getSystem().getString(R.string.assignedTasks) -> viewModel.getAssignedNotes(username)
                     else -> listOf()
                 }
             //val notesNonMutable = viewModel.getNotes(username)

@@ -6,6 +6,9 @@
         android:id="@+id/add_subaccount_button"
         android:title="Add Task"/>
 
+    <item
+        android:id="@+id/delete_subaccount_button"
+        android:title="Delete Notes"/>
 
     <item
         android:id="@+id/logout_subaccount_button"

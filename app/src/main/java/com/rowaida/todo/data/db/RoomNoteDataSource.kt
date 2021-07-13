@@ -53,15 +53,6 @@ class RoomNoteDataSource (context: Context) : NoteDataSource {
                 ))
                 userWithNotes.note
             }
-//            notes = userWithNotesDao.getNotes(username).first().notes.map {
-//                Note(
-//                    it.id,
-//                    it.username,
-//                    it.note,
-//                    Status.valueOf(it.status),
-//                    it.owner
-//                )
-//            }
         }
         println("GET NOTES AT DATA SOURCE: $notes")
         return notes
@@ -80,15 +71,6 @@ class RoomNoteDataSource (context: Context) : NoteDataSource {
                 ))
                 userWithNotes.note
             }
-//            notes = userWithNotesDao.getAssignedNotes(username).first().notes.map {
-//                Note(
-//                    it.id,
-//                    it.username,
-//                    it.note,
-//                    Status.valueOf(it.status),
-//                    it.owner
-//                )
-//            }
         }
         println("ASSIGNED NOTES AT DATA SOURCE: $notes")
         return notes
@@ -107,18 +89,13 @@ class RoomNoteDataSource (context: Context) : NoteDataSource {
                 ))
                 userWithNotes.note
             }
-//            notes = userWithNotesDao.getSubAccountsNotes(username).first().notes.map {
-//                Note(
-//                    it.id,
-//                    it.username,
-//                    it.note,
-//                    Status.valueOf(it.status),
-//                    it.owner
-//                )
-//            }
         }
         println("SUBACCOUNT NOTES AT DATA SOURCE: $notes")
         return notes
+    }
+
+    override fun deleteAllNotes(username: String) {
+        noteDao.deleteAllNotes(username)
     }
 
 

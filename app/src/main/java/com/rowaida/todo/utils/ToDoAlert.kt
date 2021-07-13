@@ -4,7 +4,7 @@ import android.content.Context
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 
-object Alert {
+object ToDoAlert {
 
     fun dialog(context: Context, editText: EditText, message: String) {
         val alert = AlertDialog.Builder(context)

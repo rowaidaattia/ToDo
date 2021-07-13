@@ -15,7 +15,7 @@ import com.rowaida.todo.data.models.Status
 import com.rowaida.todo.framework.ToDoViewModelFactory
 import com.rowaida.todo.presentation.adapter.NotesAdapter
 import com.rowaida.todo.presentation.viewModel.NoteViewModel
-import com.rowaida.todo.utils.Constants
+import com.rowaida.todo.utils.ToDoConstants
 import kotlinx.coroutines.runBlocking
 
 class NotesFragment : Fragment() {
@@ -35,7 +35,7 @@ class NotesFragment : Fragment() {
 
         //initializeButton()
 
-        username = arguments?.getString(Constants.username).toString()
+        username = arguments?.getString(ToDoConstants.username).toString()
 
         noteViewModel = ViewModelProvider(this, ToDoViewModelFactory)
             .get(NoteViewModel::class.java)
@@ -66,19 +66,19 @@ class NotesFragment : Fragment() {
 
     private fun initializeList() {
         runBlocking {
-            when (arguments?.getString(Constants.tabName)) {
-                Constants.myTasks -> {
+            when (arguments?.getString(ToDoConstants.tabName)) {
+                getString(R.string.myTasks) -> {
                     notes = noteViewModel.getNotes(username)
                 }
-                Constants.subAccountTasks -> {
+                getString(R.string.subAccountTasks) -> {
                     notes = noteViewModel.getSubAccountsNotes(username)
                 }
-                Constants.assignedTasks ->
+                getString(R.string.assignedTasks) ->
                     notes = noteViewModel.getAssignedNotes(username)
                 else -> println("Invalid Tab")
             }
 
-            println(arguments?.getString(Constants.tabName) + ", NOTES: " + notes.toString())
+            println(arguments?.getString(ToDoConstants.tabName) + ", NOTES: " + notes.toString())
         }
     }
 
@@ -86,10 +86,10 @@ class NotesFragment : Fragment() {
 
         //val activity = (activity as NotesActivity)
         notesAdapter = if (notes.isEmpty()) {
-            NotesAdapter(mutableListOf(), noteViewModel, activity as NotesActivity, arguments?.getString(Constants.tabName), username)
+            NotesAdapter(mutableListOf(), noteViewModel, activity as NotesActivity, arguments?.getString(ToDoConstants.tabName), username)
         }
         else {
-            NotesAdapter(notes as MutableList<Note>, noteViewModel, activity as NotesActivity, arguments?.getString(Constants.tabName), username)
+            NotesAdapter(notes as MutableList<Note>, noteViewModel, activity as NotesActivity, arguments?.getString(ToDoConstants.tabName), username)
         }
 
         val recyclerView: RecyclerView = fragmentView.findViewById(R.id.notes_recycler_view)!!

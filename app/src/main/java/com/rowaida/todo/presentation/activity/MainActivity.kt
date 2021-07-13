@@ -5,9 +5,9 @@ import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.rowaida.todo.R
 import com.rowaida.todo.data.models.AccountType
-import com.rowaida.todo.utils.Constants
-import com.rowaida.todo.utils.Navigation
-import com.rowaida.todo.utils.SharedPreference
+import com.rowaida.todo.utils.ToDoConstants
+import com.rowaida.todo.utils.ToDoNavigation
+import com.rowaida.todo.utils.ToDoSharedPreference
 
 
 class MainActivity : AppCompatActivity() {
@@ -17,17 +17,17 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val login = SharedPreference(applicationContext).getValue(Constants.login)
-        val accountType = SharedPreference(applicationContext).getValue(Constants.accountType)
+        val login = ToDoSharedPreference(applicationContext).getValue(ToDoConstants.login)
+        val accountType = ToDoSharedPreference(applicationContext).getValue(ToDoConstants.accountType)
 
         if (login != null) {
             val bundle = Bundle()
-            bundle.putString(Constants.username, login)
+            bundle.putString(ToDoConstants.username, login)
             if (AccountType.ADMIN == accountType?.let { AccountType.valueOf(it) }) {
-                Navigation.goToActivity(bundle, this, NotesAdminActivity::class.java)
+                ToDoNavigation.goToActivity(bundle, this, NotesAdminActivity::class.java)
             }
             else {
-                Navigation.goToActivity(bundle, this, NotesSubAccountActivity::class.java)
+                ToDoNavigation.goToActivity(bundle, this, NotesSubAccountActivity::class.java)
             }
 
         }
@@ -51,10 +51,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun goToLogin() {
-        Navigation.goToActivity(null, this, LoginActivity::class.java)
+        ToDoNavigation.goToActivity(null, this, LoginActivity::class.java)
     }
 
     private fun goToSignup() {
-        Navigation.goToActivity(null, this, SignupActivity::class.java)
+        ToDoNavigation.goToActivity(null, this, SignupActivity::class.java)
     }
 }

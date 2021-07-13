@@ -1,6 +1,5 @@
 package com.rowaida.todo.presentation.activity
 
-import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.ViewGroup
@@ -10,7 +9,6 @@ import com.rowaida.todo.R
 import com.rowaida.todo.data.models.Note
 import com.rowaida.todo.data.models.Status
 import com.rowaida.todo.presentation.adapter.ViewPagerAdapter
-import com.rowaida.todo.utils.Constants
 import kotlinx.coroutines.runBlocking
 
 
@@ -18,8 +16,8 @@ class NotesAdminActivity : NotesActivity() {
 
     override fun setupViewPager(viewpager: ViewPager) {
         val adapter = ViewPagerAdapter(supportFragmentManager)
-        adapter.addFragment(createFragment(Constants.myTasks), Constants.myTasks)
-        adapter.addFragment(createFragment(Constants.subAccountTasks), Constants.subAccountTasks)
+        adapter.addFragment(createFragment(getString(R.string.myTasks)), getString(R.string.myTasks))
+        adapter.addFragment(createFragment(getString(R.string.subAccountTasks)), getString(R.string.subAccountTasks))
         // setting adapter to view pager.
         viewpager.adapter = adapter
     }
@@ -48,20 +46,24 @@ class NotesAdminActivity : NotesActivity() {
                 addAccount()
                 true
             }
+            R.id.delete_admin_button -> {
+                deleteAllNotes()
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
 
     private fun assignNote() {
         val alert = AlertDialog.Builder(this)
-        alert.setMessage(Constants.enterNote)
+        alert.setMessage(getString(R.string.enterNote))
         alert.setView(edittext)
         alert.setPositiveButton(
-            Constants.next
+            getString(R.string.next)
         ) { _, _ -> //What ever you want to do with the value
             // setup the alert builder
             val builder = AlertDialog.Builder(this)
-            builder.setTitle(Constants.chooseUser)
+            builder.setTitle(getString(R.string.chooseUser))
 
             // add a radio button list
             val users = runBlocking {
@@ -75,7 +77,7 @@ class NotesAdminActivity : NotesActivity() {
             }
 
             // add OK and Cancel buttons
-            builder.setPositiveButton(Constants.done) { dialog, which ->
+            builder.setPositiveButton(getString(R.string.done)) { dialog, which ->
                 // user clicked OK
                 runBlocking {
                     noteViewModel.addNote(
@@ -89,7 +91,7 @@ class NotesAdminActivity : NotesActivity() {
                 }
                 edittext.setText("")
             }
-            builder.setNegativeButton(Constants.cancel, null)
+            builder.setNegativeButton(getString(R.string.cancel), null)
 
             // create and show the alert dialog
             val dialog = builder.create()
@@ -97,7 +99,7 @@ class NotesAdminActivity : NotesActivity() {
         }
 
         alert.setNegativeButton(
-            Constants.cancel
+            getString(R.string.cancel)
         ) { dialog, _ ->
             edittext.setText("")
             dialog.dismiss()
@@ -111,7 +113,7 @@ class NotesAdminActivity : NotesActivity() {
     private fun addAccount() {
         // setup the alert builder
         val builder = AlertDialog.Builder(this)
-        builder.setTitle(Constants.chooseUser)
+        builder.setTitle(getString(R.string.chooseUser))
 
         // add a radio button list
         val users = runBlocking {
@@ -126,11 +128,11 @@ class NotesAdminActivity : NotesActivity() {
 
 
         // add OK and Cancel buttons
-        builder.setPositiveButton(Constants.ok) { dialog, which ->
+        builder.setPositiveButton(getString(R.string.ok)) { dialog, which ->
             // user clicked OK
             userViewModel.addSubAccount(username, subAccount)
         }
-        builder.setNegativeButton(Constants.cancel, null)
+        builder.setNegativeButton(getString(R.string.cancel), null)
 
         // create and show the alert dialog
         val dialog = builder.create()
