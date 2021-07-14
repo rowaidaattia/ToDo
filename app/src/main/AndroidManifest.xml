@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.rowaida.todo">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -21,7 +22,7 @@
         <activity android:name=".presentation.activity.SignupActivity" />
         <activity android:name=".presentation.activity.NotesAdminActivity"/>
         <activity android:name=".presentation.activity.NotesSubAccountActivity"/>
-        <service android:name=".presentation.activity.ToDoService" />
+        <service android:name=".presentation.service.ToDoService" />
     </application>
 
 </manifest>

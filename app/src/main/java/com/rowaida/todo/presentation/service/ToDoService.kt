@@ -1,17 +1,12 @@
-package com.rowaida.todo.presentation.activity
+package com.rowaida.todo.presentation.service
 
 import android.app.Service
 import android.content.Intent
 import android.os.*
 import android.os.Process.THREAD_PRIORITY_BACKGROUND
 import android.widget.Toast
-import com.rowaida.todo.data.db.NoteDao
 import com.rowaida.todo.data.db.RoomNoteDataSource
-import com.rowaida.todo.domain.useCases.UseCases
 import com.rowaida.todo.utils.ToDoConstants
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import java.lang.Process
 
 class ToDoService : Service() {
 

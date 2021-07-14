@@ -5,7 +5,7 @@ import android.content.Intent
 import com.rowaida.todo.data.models.Note
 import com.rowaida.todo.framework.ToDoViewModel
 import com.rowaida.todo.domain.useCases.UseCases
-import com.rowaida.todo.presentation.activity.ToDoService
+import com.rowaida.todo.presentation.service.ToDoService
 import com.rowaida.todo.utils.ToDoConstants
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
@@ -62,8 +62,8 @@ class NoteViewModel (application: Application, useCases: UseCases) :
     fun deleteAllNotes(username: String) {
 //        useCases.deleteAllNotesUseCase(username)
         Intent(application, ToDoService::class.java)
-            .putExtra(ToDoConstants.username, username)
             .also { intent ->
+                intent.putExtra(ToDoConstants.username, username)
                 application.startService(intent)
         }
     }
