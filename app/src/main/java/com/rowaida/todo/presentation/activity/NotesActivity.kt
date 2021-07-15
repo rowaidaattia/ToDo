@@ -3,6 +3,7 @@ package com.rowaida.todo.presentation.activity
 import android.os.Bundle
 import android.view.ViewGroup
 import android.widget.EditText
+import androidx.appcompat.widget.Toolbar
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
@@ -31,6 +32,7 @@ open class NotesActivity : AppCompatActivity(), NotesInterface {
     lateinit var userViewModel: UserViewModel
     private lateinit var tabViewpager: ViewPager
     private lateinit var tabTablayout: TabLayout
+    private lateinit var tabToolbar: Toolbar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,9 +49,11 @@ open class NotesActivity : AppCompatActivity(), NotesInterface {
 
         // Create the object of Toolbar, ViewPager and
         // TabLayout and use “findViewById()” method*/
-        tabViewpager = findViewById<ViewPager>(R.id.tab_viewpager)
-        tabTablayout = findViewById<TabLayout>(R.id.tab_tablayout)
+        tabViewpager = findViewById(R.id.tab_viewpager)
+        tabTablayout = findViewById(R.id.tab_tablayout)
+        tabToolbar = findViewById(R.id.toolbar)
 
+        setSupportActionBar(tabToolbar)
         setupViewPager(tabViewpager)
 
         // If we don't use setupWithViewPager() method then
