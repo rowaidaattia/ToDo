@@ -29,20 +29,6 @@ class MainActivity : AppCompatActivity() {
         }
         registerReceiver(br, filter)
 
-//        val login = ToDoSharedPreference(applicationContext).getValue(ToDoConstants.login)
-//        val accountType = ToDoSharedPreference(applicationContext).getValue(ToDoConstants.accountType)
-//
-//        if (login != null) {
-//            val bundle = Bundle()
-//            bundle.putString(ToDoConstants.username, login)
-//            if (AccountType.ADMIN == accountType?.let { AccountType.valueOf(it) }) {
-//                ToDoNavigation.goToActivity(bundle, this, NotesAdminActivity::class.java)
-//            }
-//            else {
-//                ToDoNavigation.goToActivity(bundle, this, NotesSubAccountActivity::class.java)
-//            }
-//
-//        }
         setContentView(R.layout.activity_main)
         initializeButtons()
     }

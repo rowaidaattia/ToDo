@@ -1,12 +1,16 @@
 package com.rowaida.todo.presentation.activity
 
+import android.content.BroadcastReceiver
 import android.content.Intent
+import android.content.IntentFilter
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.os.Handler
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import com.rowaida.todo.R
 import com.rowaida.todo.data.models.AccountType
+import com.rowaida.todo.presentation.broadcastReceiver.NetworkBroadcastReceiver
 import com.rowaida.todo.utils.ToDoConstants
 import com.rowaida.todo.utils.ToDoNavigation
 import com.rowaida.todo.utils.ToDoSharedPreference
@@ -27,6 +31,9 @@ class SplashActivity : AppCompatActivity() {
         //this will bind your SplashActivity.class file with activity_splash.
 
         Handler().postDelayed({
+
+            setBroadcast()
+
             val login = ToDoSharedPreference(applicationContext).getValue(ToDoConstants.login)
             val accountType = ToDoSharedPreference(applicationContext).getValue(ToDoConstants.accountType)
 
@@ -42,12 +49,20 @@ class SplashActivity : AppCompatActivity() {
 
             }
             else {
-                ToDoNavigation.goToActivity(null, this, MainActivity::class.java)
+                ToDoNavigation.goToActivity(null, this, LoginActivity::class.java)
             }
 
             finish()
 
         }, SPLASH_SCREEN_TIME_OUT.toLong())
+    }
+    private fun setBroadcast() {
+        val br: BroadcastReceiver = NetworkBroadcastReceiver()
+        val filter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION).apply {
+            addAction("android.net.conn.CONNECTIVITY_CHANGE")
+        }
+        registerReceiver(br, filter)
+
     }
 
 }

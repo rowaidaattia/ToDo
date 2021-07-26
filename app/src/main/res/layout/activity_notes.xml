@@ -20,8 +20,16 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/teal_700"
             app:layout_scrollFlags="scroll|enterAlways"
-            app:titleTextColor="#FFFFFF" />
+            app:titleTextColor="#FFFFFF">
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                app:srcCompat="@drawable/logo" />
+        </androidx.appcompat.widget.Toolbar>
 
         <!-- tablayout which contains which is
             important to show tabs -->
@@ -32,6 +40,7 @@
             app:tabIndicatorColor="#FFF"
             app:tabIndicatorHeight="3dp"
             app:tabMode="fixed" />
+
     </com.google.android.material.appbar.AppBarLayout>
 
     <!-- view pager is used to open other fragment by using

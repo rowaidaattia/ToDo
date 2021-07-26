@@ -10,6 +10,8 @@ import com.rowaida.todo.data.models.Note
 import com.rowaida.todo.data.models.Status
 import com.rowaida.todo.presentation.adapter.ViewPagerAdapter
 import kotlinx.coroutines.runBlocking
+import java.time.LocalDate
+import java.util.*
 
 
 class NotesAdminActivity : NotesActivity() {
@@ -83,9 +85,11 @@ class NotesAdminActivity : NotesActivity() {
                     noteViewModel.addNote(
                         Note(
                             username = subAccount,
-                            note = edittext.text.toString(),
+                            name = edittext.text.toString(),
+                            description = "Description",
                             status = Status.IN_PROGRESS,
-                            owner = username
+                            owner = username,
+                            date = Calendar.getInstance().time
                         ))
                     updateFragment(1, noteViewModel.getSubAccountsNotes(username))
                 }

@@ -1,10 +1,13 @@
 package com.rowaida.todo.presentation.activity
 
+import android.annotation.SuppressLint
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,6 +20,7 @@ import com.rowaida.todo.presentation.adapter.NotesAdapter
 import com.rowaida.todo.presentation.viewModel.NoteViewModel
 import com.rowaida.todo.utils.ToDoConstants
 import kotlinx.coroutines.runBlocking
+import kotlin.math.roundToInt
 
 class NotesFragment : Fragment() {
 
@@ -57,11 +61,16 @@ class NotesFragment : Fragment() {
                 curr++
             }
         }
+        fragmentView.findViewById<TextView>(R.id.progressText).text = "Task(s): $curr/${max.roundToInt()}"
         return ((curr / max) * 100).toInt()
     }
 
+    @SuppressLint("ResourceAsColor")
     fun initializeProgressBar() {
-        fragmentView.findViewById<ProgressBar>(R.id.progressBar).progress = getCurrentProgress()
+        val progressBar = fragmentView.findViewById<ProgressBar>(R.id.progressBar)
+        progressBar.progressDrawable.setColorFilter(
+            R.color.teal_200, android.graphics.PorterDuff.Mode.SRC_IN)
+        progressBar.progress = getCurrentProgress()
     }
 
     private fun initializeList() {

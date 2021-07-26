@@ -13,11 +13,13 @@ class RoomNoteDataSource (context: Context) : NoteDataSource {
     override suspend fun add(note: Note) =
         noteDao.addNote(
             NoteEntity(
-            note.id,
-            note.username,
-            note.note,
-            note.status.name,
-            note.owner
+                note.id,
+                note.username,
+                note.name,
+                note.description,
+                note.status.name,
+                note.owner,
+                note.date
         ))
 
     override suspend fun remove(note: Note) =
@@ -25,9 +27,11 @@ class RoomNoteDataSource (context: Context) : NoteDataSource {
             NoteEntity(
                 note.id,
                 note.username,
-                note.note,
+                note.name,
+                note.description,
                 note.status.name,
-                note.owner
+                note.owner,
+                note.date
             ))
 
     override suspend fun update(note: Note) =
@@ -35,9 +39,11 @@ class RoomNoteDataSource (context: Context) : NoteDataSource {
             NoteEntity(
                 note.id,
                 note.username,
-                note.note,
+                note.name,
+                note.description,
                 note.status.name,
-                note.owner
+                note.owner,
+                note.date
             ))
 
     override suspend fun get(username: String): List<Note> {
@@ -47,9 +53,11 @@ class RoomNoteDataSource (context: Context) : NoteDataSource {
                 notes.add(Note(
                     userWithNotes.note.id,
                     userWithNotes.note.username,
-                    userWithNotes.note.note,
+                    userWithNotes.note.name,
+                    userWithNotes.note.description,
                     Status.valueOf(userWithNotes.note.status),
-                    userWithNotes.note.owner
+                    userWithNotes.note.owner,
+                    userWithNotes.note.date
                 ))
                 userWithNotes.note
             }
@@ -65,9 +73,11 @@ class RoomNoteDataSource (context: Context) : NoteDataSource {
                 notes.add(Note(
                     userWithNotes.note.id,
                     userWithNotes.note.username,
-                    userWithNotes.note.note,
+                    userWithNotes.note.name,
+                    userWithNotes.note.description,
                     Status.valueOf(userWithNotes.note.status),
-                    userWithNotes.note.owner
+                    userWithNotes.note.owner,
+                    userWithNotes.note.date
                 ))
                 userWithNotes.note
             }
@@ -83,9 +93,11 @@ class RoomNoteDataSource (context: Context) : NoteDataSource {
                 notes.add(Note(
                     userWithNotes.note.id,
                     userWithNotes.note.username,
-                    userWithNotes.note.note,
+                    userWithNotes.note.name,
+                    userWithNotes.note.description,
                     Status.valueOf(userWithNotes.note.status),
-                    userWithNotes.note.owner
+                    userWithNotes.note.owner,
+                    userWithNotes.note.date
                 ))
                 userWithNotes.note
             }

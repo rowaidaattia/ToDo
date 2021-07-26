@@ -30,4 +30,8 @@
     <string name="enterNote">Enter Note</string>
     <string name="editNote">Edit Note</string>
     <string name="chooseUser">Choose User</string>
+    <string name="no_account">Don\'t have an account?</string>
+    <string name="missing_usernameOrEmail">Please enter your username or email</string>
+    <string name="missing_password">Please enter your password</string>
+    <string name="gender">Gender</string>
 </resources>

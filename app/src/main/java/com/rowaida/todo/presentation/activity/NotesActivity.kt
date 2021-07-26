@@ -22,6 +22,10 @@ import com.rowaida.todo.utils.ToDoSharedPreference
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import java.util.Date
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.util.*
 
 
 open class NotesActivity : AppCompatActivity(), NotesInterface {
@@ -54,6 +58,8 @@ open class NotesActivity : AppCompatActivity(), NotesInterface {
         tabToolbar = findViewById(R.id.toolbar)
 
         setSupportActionBar(tabToolbar)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+
         setupViewPager(tabViewpager)
 
         // If we don't use setupWithViewPager() method then
@@ -99,7 +105,7 @@ open class NotesActivity : AppCompatActivity(), NotesInterface {
     override fun editNote(updateNote: Note) {
         val alert = AlertDialog.Builder(this)
         val edittext = EditText(applicationContext)
-        edittext.setText(updateNote.note)
+        edittext.setText(updateNote.name)
         alert.setMessage(getString(R.string.editNote))
         alert.setView(edittext)
         alert.setPositiveButton(
@@ -111,9 +117,11 @@ open class NotesActivity : AppCompatActivity(), NotesInterface {
                     Note(
                         id = updateNote.id,
                         username = updateNote.username,
-                        note = edittext.text.toString(),
+                        name = edittext.text.toString(),
+                        description = "Description",
                         status = updateNote.status,
                         owner = updateNote.username,
+                        date = Calendar.getInstance().time
                     )
                 )
                 updateFragment(0, noteViewModel.getNotes(username))
@@ -133,7 +141,7 @@ open class NotesActivity : AppCompatActivity(), NotesInterface {
     fun logout() {
         ToDoSharedPreference(applicationContext).remove(ToDoConstants.login)
         this.finish()
-        ToDoNavigation.goToActivity(null, this, MainActivity::class.java)
+        ToDoNavigation.goToActivity(null, this, LoginActivity::class.java)
     }
 
     fun addMyNote() {
@@ -147,10 +155,12 @@ open class NotesActivity : AppCompatActivity(), NotesInterface {
             runBlocking {
                 noteViewModel.addNote(
                     Note(
-                    username = username,
-                    note = edittext.text.toString(),
-                    status = Status.IN_PROGRESS,
-                    owner = username
+                        username = username,
+                        name = edittext.text.toString(),
+                        description = "Description",
+                        status = Status.IN_PROGRESS,
+                        owner = username,
+                        date = Calendar.getInstance().time
                 ))
                 updateFragment(0, noteViewModel.getNotes(username))
             }

@@ -6,6 +6,7 @@ import android.text.TextUtils
 import android.widget.Button
 import android.widget.EditText
 import androidx.lifecycle.ViewModelProvider
+import com.google.android.material.textfield.TextInputLayout
 import com.rowaida.todo.R
 import com.rowaida.todo.data.models.AccountType
 import com.rowaida.todo.framework.ToDoViewModelFactory
@@ -17,6 +18,7 @@ class LoginActivity : AppCompatActivity() {
 
     private lateinit var viewModel: UserViewModel
     private lateinit var loginButton : Button
+    private lateinit var signupButton : Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,14 +27,49 @@ class LoginActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this, ToDoViewModelFactory)
             .get(UserViewModel::class.java)
 
-        initializeButton()
+        initializeButtons()
     }
 
-    private fun initializeButton() {
-        loginButton = findViewById(R.id.login_button2)
+    private fun initializeButtons() {
+        loginButton = findViewById(R.id.login_button)
 
         loginButton.setOnClickListener {
             loginCLicked()
+        }
+
+        signupButton = findViewById(R.id.signup_button)
+
+        signupButton.setOnClickListener {
+            signupClicked()
+        }
+
+    }
+
+    private fun signupClicked() {
+        ToDoNavigation.goToActivity(null, this, SignupActivity::class.java)
+    }
+
+    private fun checkUsernameOrEmail(usernameOrEmail: String) : Boolean {
+        val emailError = findViewById<TextInputLayout>(R.id.emailError)
+
+        return if (TextUtils.isEmpty(usernameOrEmail)) {
+            emailError.error = getString(R.string.missing_usernameOrEmail)
+            false
+        } else {
+            emailError.error = null
+            true
+        }
+    }
+
+    private fun checkPassword(password: String) : Boolean {
+        val passError = findViewById<TextInputLayout>(R.id.passError)
+
+        return if (TextUtils.isEmpty(password)) {
+            passError.error = getString(R.string.missing_password)
+            false
+        } else {
+            passError.error = null
+            true
         }
     }
 
@@ -41,11 +78,10 @@ class LoginActivity : AppCompatActivity() {
         val usernameOrEmail = findViewById<EditText>(R.id.username_login).text.toString()
         val password = findViewById<EditText>(R.id.password_login).text.toString()
 
-        if (TextUtils.isEmpty(usernameOrEmail) || TextUtils.isEmpty(password)) {
-            ToDoToast.toast(applicationContext, applicationContext.getString(R.string.missing_fields))
-        }
+        val checkUser = checkUsernameOrEmail(usernameOrEmail)
+        val checkPass = checkPassword(password)
 
-        else {
+        if (checkUser && checkPass) {
             if (viewModel.checkUser(usernameOrEmail, password)) {
                 val username = viewModel.getUsername(usernameOrEmail)
                 when(viewModel.getAccountType(username)) {
@@ -60,13 +96,5 @@ class LoginActivity : AppCompatActivity() {
             }
         }
     }
-
-//    private fun goToNotes(username: String) {
-//        SharedPreference(applicationContext).writeString(Constants.login, username)
-//        val bundle = Bundle()
-//        bundle.putString(Constants.username, username)
-//        this.finish()
-//        Navigation.goToActivity(bundle, this, NotesActivity::class.java)
-//    }
 
 }

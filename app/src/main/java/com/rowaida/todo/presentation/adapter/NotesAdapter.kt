@@ -12,7 +12,10 @@ import com.rowaida.todo.data.models.Note
 import com.rowaida.todo.data.models.Status
 import com.rowaida.todo.presentation.activity.NotesInterface
 import com.rowaida.todo.presentation.viewModel.NoteViewModel
+import com.rowaida.todo.utils.ToDoStrings
 import kotlinx.coroutines.runBlocking
+import java.time.LocalDate
+import java.util.*
 
 
 class NotesAdapter(private var notes: MutableList<Note>, val viewModel: NoteViewModel,
@@ -23,6 +26,8 @@ class NotesAdapter(private var notes: MutableList<Note>, val viewModel: NoteView
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val status: CheckBox = itemView.findViewById(R.id.note_status)
         val note: TextView = itemView.findViewById(R.id.note_text)
+        val description: TextView = itemView.findViewById(R.id.note_description)
+        val statusText: TextView = itemView.findViewById(R.id.status_text)
         private val editButton: ImageButton = itemView.findViewById(R.id.edit_button)
         private val deleteButton: ImageButton = itemView.findViewById(R.id.delete_button)
 
@@ -53,9 +58,11 @@ class NotesAdapter(private var notes: MutableList<Note>, val viewModel: NoteView
                         Note(
                             id = updateNote.id,
                             username = updateNote.username,
-                            note = updateNote.note,
+                            name = updateNote.name,
+                            description = "Description",
                             status = updateStatus,
-                            owner = updateNote.owner
+                            owner = updateNote.owner,
+                            date = Calendar.getInstance().time
                         )
                     )
                 }
@@ -73,9 +80,11 @@ class NotesAdapter(private var notes: MutableList<Note>, val viewModel: NoteView
                         Note(
                             id = deleteNote.id,
                             username = deleteNote.username,
-                            note = deleteNote.note,
+                            name = deleteNote.name,
+                            description= "Description",
                             status = deleteNote.status,
-                            owner = deleteNote.owner
+                            owner = deleteNote.owner,
+                            date = Calendar.getInstance().time
                         )
                     )
                 }
@@ -93,7 +102,7 @@ class NotesAdapter(private var notes: MutableList<Note>, val viewModel: NoteView
 
         return ViewHolder(
             LayoutInflater.from(viewGroup.context)
-                .inflate(R.layout.note_layout, viewGroup, false)
+                .inflate(R.layout.note_cardview, viewGroup, false)
         )
 
     }
@@ -106,7 +115,9 @@ class NotesAdapter(private var notes: MutableList<Note>, val viewModel: NoteView
 
         val curNote = notes[position]
         viewHolder.status.isChecked = curNote.status == Status.DONE
-        viewHolder.note.text = curNote.note
+        viewHolder.note.text = curNote.name
+        viewHolder.description.text = curNote.description
+        viewHolder.statusText.text = curNote.status.toString()
     }
 
     // Return the size of your dataset (invoked by the layout manager)
@@ -118,12 +129,13 @@ class NotesAdapter(private var notes: MutableList<Note>, val viewModel: NoteView
     }
 
     fun getUpdatedNotes(username: String) {
+        val x =  ToDoStrings.get(R.string.myTasks)
         runBlocking {
             val notesNonMutable : List<Note> =
                 when (tabName) {
-                    Resources.getSystem().getString(R.string.myTasks) -> viewModel.getNotes(username)
-                    Resources.getSystem().getString(R.string.subAccountTasks) -> viewModel.getSubAccountsNotes(username)
-                    Resources.getSystem().getString(R.string.assignedTasks) -> viewModel.getAssignedNotes(username)
+                    ToDoStrings.get(R.string.myTasks) -> viewModel.getNotes(username)
+                    ToDoStrings.get(R.string.subAccountTasks) -> viewModel.getSubAccountsNotes(username)
+                    ToDoStrings.get(R.string.assignedTasks) -> viewModel.getAssignedNotes(username)
                     else -> listOf()
                 }
             //val notesNonMutable = viewModel.getNotes(username)

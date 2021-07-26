@@ -1,16 +1,17 @@
 package com.rowaida.todo.presentation.activity
 
 import android.annotation.SuppressLint
-import android.app.DatePickerDialog
 import android.os.Bundle
 import android.text.InputType
 import android.text.TextUtils
-import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.RadioButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.*
+import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.rowaida.todo.R
 import com.rowaida.todo.data.models.AccountType
 import com.rowaida.todo.data.models.Gender
@@ -50,25 +51,37 @@ class SignupActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("ResourceAsColor")
     private fun initializeDatePicker() {
-        val birthdayText: EditText? = findViewById(R.id.birthday)
-        birthdayText?.inputType = InputType.TYPE_NULL
-        birthdayText?.setOnClickListener(View.OnClickListener {
-            val cldr: Calendar = Calendar.getInstance()
-            val day: Int = cldr.get(Calendar.DAY_OF_MONTH)
-            val month: Int = cldr.get(Calendar.MONTH)
-            val year: Int = cldr.get(Calendar.YEAR)
+        val birthdayText: TextInputEditText? = findViewById(R.id.birthday)
+        val outputDateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).apply {
+            timeZone = TimeZone.getTimeZone("UTC")
+        }
 
-            // date picker dialog
-            val picker = DatePickerDialog(this,
-                { _, year, monthOfYear, dayOfMonth ->
-                    birthdayText.setText(dayOfMonth.toString() + "/" + (monthOfYear + 1) + "/" + year) },
-                year,
-                month,
-                day
-            )
-            picker.show()
-        })
+        birthdayText?.inputType = InputType.TYPE_NULL
+        birthdayText?.setTextColor(R.color.black)
+        birthdayText?.setOnClickListener {
+            val datePicker =
+                MaterialDatePicker.Builder.datePicker()
+                    .setTitleText("Select date")
+                    .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+                    .build()
+
+            datePicker.addOnPositiveButtonClickListener {
+                birthdayText.setText(outputDateFormat.format(it))
+            }
+            datePicker.show(supportFragmentManager, "tag")
+        }
+    }
+
+    private fun check(text: String, error: TextInputLayout) : Boolean {
+        return if (TextUtils.isEmpty(text)) {
+            error.error = getString(R.string.missing_fields)
+            false
+        } else {
+            error.error = null
+            true
+        }
     }
 
     @SuppressLint("SimpleDateFormat")
@@ -81,12 +94,12 @@ class SignupActivity : AppCompatActivity() {
         val male = findViewById<RadioButton>(R.id.male).isChecked
         val female = findViewById<RadioButton>(R.id.female).isChecked
 
-        if (TextUtils.isEmpty(username) || TextUtils.isEmpty(password) ||
-            TextUtils.isEmpty(email) || TextUtils.isEmpty(birthday) ||
-            !(male || female)) {
-                ToDoToast.toast(applicationContext, applicationContext.getString(R.string.missing_fields))
-        }
-        else {
+        val checkUser = check(username, findViewById(R.id.usernameError2))
+        val checkEmail = check(email, findViewById(R.id.emailError2))
+        val checkPass = check(password, findViewById(R.id.passError2))
+        val checkBirth = check(birthday, findViewById(R.id.birthError2))
+
+        if (checkUser && checkEmail && checkPass && checkBirth && (male || female)) {
             //add user
             val gender = if (male) Gender.MALE else Gender.FEMALE
             val date = SimpleDateFormat("dd/MM/yyyy").parse(birthday)
@@ -102,13 +115,5 @@ class SignupActivity : AppCompatActivity() {
         }
 
     }
-
-//    private fun goToNotes(username: String) {
-//        SharedPreference(applicationContext).writeString(Constants.login, username)
-//        val bundle = Bundle()
-//        bundle.putString(Constants.username, username)
-//        this.finish()
-//        Navigation.goToActivity(bundle, this, NotesActivity::class.java)
-//    }
 
 }
