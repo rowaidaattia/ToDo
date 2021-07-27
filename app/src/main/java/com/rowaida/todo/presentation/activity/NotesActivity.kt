@@ -1,14 +1,16 @@
 package com.rowaida.todo.presentation.activity
 
 import android.os.Bundle
-import android.view.ViewGroup
+import android.widget.Button
 import android.widget.EditText
-import androidx.appcompat.widget.Toolbar
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager.widget.ViewPager
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.tabs.TabLayout
+import com.google.android.material.textfield.TextInputEditText
 import com.rowaida.todo.R
 import com.rowaida.todo.data.models.Note
 import com.rowaida.todo.data.models.Status
@@ -22,11 +24,7 @@ import com.rowaida.todo.utils.ToDoSharedPreference
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import java.util.Date
-import java.time.LocalDate
-import java.time.LocalDateTime
 import java.util.*
-import kotlin.collections.HashMap
 
 
 open class NotesActivity : AppCompatActivity(), NotesInterface {
@@ -106,8 +104,8 @@ open class NotesActivity : AppCompatActivity(), NotesInterface {
     override fun editNote(updateNote: Note) {
         val alert = AlertDialog.Builder(this)
         val edittext = EditText(applicationContext)
-        edittext.setText(updateNote.name)
-        alert.setMessage(getString(R.string.editNote))
+        edittext.setText(updateNote.description)
+        alert.setMessage(getString(R.string.editNote) + updateNote.name)
         alert.setView(edittext)
         alert.setPositiveButton(
             getString(R.string.update)
@@ -118,8 +116,8 @@ open class NotesActivity : AppCompatActivity(), NotesInterface {
                     Note(
                         id = updateNote.id,
                         username = updateNote.username,
-                        name = edittext.text.toString(),
-                        description = "Description",
+                        name = updateNote.name,
+                        description = edittext.text.toString(),
                         status = updateNote.status,
                         owner = updateNote.username,
                         date = updateNote.date
@@ -146,41 +144,34 @@ open class NotesActivity : AppCompatActivity(), NotesInterface {
     }
 
     fun addMyNote() {
-        val alert = AlertDialog.Builder(this)
-        alert.setMessage(getString(R.string.enterNote))
-        alert.setView(edittext)
-        alert.setPositiveButton(
-            getString(R.string.save)
-        ) { _, _ -> //What ever you want to do with the value
-            //add note to database
+        val bottomSheetDialog = BottomSheetDialog(this)
+        bottomSheetDialog.setContentView(R.layout.bottom_sheet_add_task)
+        val save = bottomSheetDialog.findViewById<Button>(R.id.save_button)
+        val cancel = bottomSheetDialog.findViewById<Button>(R.id.cancel_button)
+        val name = bottomSheetDialog.findViewById<TextInputEditText>(R.id.task_name)
+        val description = bottomSheetDialog.findViewById<TextInputEditText>(R.id.task_description)
+
+        save?.setOnClickListener {
             runBlocking {
                 noteViewModel.addNote(
                     Note(
                         username = username,
-                        name = edittext.text.toString(),
-                        description = "Description",
+                        name = name?.text.toString(),
+                        description = description?.text.toString(),
                         status = Status.IN_PROGRESS,
                         owner = username,
                         date = Calendar.getInstance().time
                 ))
                 updateFragment(0, noteViewModel.getNotes(username))
             }
-
-
-            edittext.setText("")
-
+            bottomSheetDialog.dismiss()
         }
 
-        alert.setNegativeButton(
-            getString(R.string.cancel)
-        ) { dialog, _ ->
-            edittext.setText("")
-            dialog.dismiss()
+        cancel?.setOnClickListener {
+            bottomSheetDialog.dismiss()
         }
-        if(edittext.parent != null) {
-            (edittext.parent as ViewGroup).removeView(edittext)
-        }
-        alert.show()
+
+        bottomSheetDialog.show()
     }
 
     fun deleteAllNotes() {

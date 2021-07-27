@@ -2,15 +2,18 @@ package com.rowaida.todo.presentation.activity
 
 import android.view.Menu
 import android.view.MenuItem
-import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.Spinner
 import androidx.appcompat.app.AlertDialog
 import androidx.viewpager.widget.ViewPager
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.textfield.TextInputEditText
 import com.rowaida.todo.R
 import com.rowaida.todo.data.models.Note
 import com.rowaida.todo.data.models.Status
 import com.rowaida.todo.presentation.adapter.ViewPagerAdapter
 import kotlinx.coroutines.runBlocking
-import java.time.LocalDate
 import java.util.*
 
 
@@ -57,61 +60,49 @@ class NotesAdminActivity : NotesActivity() {
     }
 
     private fun assignNote() {
-        val alert = AlertDialog.Builder(this)
-        alert.setMessage(getString(R.string.enterNote))
-        alert.setView(edittext)
-        alert.setPositiveButton(
-            getString(R.string.next)
-        ) { _, _ -> //What ever you want to do with the value
-            // setup the alert builder
-            val builder = AlertDialog.Builder(this)
-            builder.setTitle(getString(R.string.chooseUser))
 
-            // add a radio button list
-            val users = runBlocking {
-                userViewModel.getSubAccounts(username).toTypedArray()
-            }
-            var subAccount = users[0]
-            val checkedItem = 0
-            builder.setSingleChoiceItems(users, checkedItem) { dialog, which ->
-                // user checked an item
-                subAccount = users[which]
-            }
-
-            // add OK and Cancel buttons
-            builder.setPositiveButton(getString(R.string.done)) { dialog, which ->
-                // user clicked OK
-                runBlocking {
-                    noteViewModel.addNote(
-                        Note(
-                            username = subAccount,
-                            name = edittext.text.toString(),
-                            description = "Description",
-                            status = Status.IN_PROGRESS,
-                            owner = username,
-                            date = Calendar.getInstance().time
-                        ))
-                    updateFragment(1, noteViewModel.getSubAccountsNotes(username))
-                }
-                edittext.setText("")
-            }
-            builder.setNegativeButton(getString(R.string.cancel), null)
-
-            // create and show the alert dialog
-            val dialog = builder.create()
-            dialog.show()
+        val users = runBlocking {
+            userViewModel.getSubAccounts(username).toTypedArray()
         }
 
-        alert.setNegativeButton(
-            getString(R.string.cancel)
-        ) { dialog, _ ->
-            edittext.setText("")
-            dialog.dismiss()
+        val bottomSheetDialog = BottomSheetDialog(this)
+        bottomSheetDialog.setContentView(R.layout.bottom_sheet_assign_task)
+        val assign = bottomSheetDialog.findViewById<Button>(R.id.assign_button)
+        val cancel = bottomSheetDialog.findViewById<Button>(R.id.cancel_assign_button)
+        val name = bottomSheetDialog.findViewById<TextInputEditText>(R.id.assign_task_name)
+        val description = bottomSheetDialog.findViewById<TextInputEditText>(R.id.assign_task_description)
+        val spinner = bottomSheetDialog.findViewById<Spinner>(R.id.spinner)
+        // Create an ArrayAdapter using the string array and a default spinner layout
+
+        ArrayAdapter(
+            this, android.R.layout.simple_spinner_item, users).also { adapter ->
+            // Specify the layout to use when the list of choices appears
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            // Apply the adapter to the spinner
+            spinner?.adapter = adapter
         }
-        if(edittext.parent != null) {
-            (edittext.parent as ViewGroup).removeView(edittext)
+
+        assign?.setOnClickListener {
+            runBlocking {
+                noteViewModel.addNote(
+                    Note(
+                        username = spinner?.selectedItem.toString(),
+                        name = name?.text.toString(),
+                        description = description?.text.toString(),
+                        status = Status.IN_PROGRESS,
+                        owner = username,
+                        date = Calendar.getInstance().time
+                    ))
+                updateFragment(1, noteViewModel.getSubAccountsNotes(username))
+            }
+            bottomSheetDialog.dismiss()
         }
-        alert.show()
+
+        cancel?.setOnClickListener {
+            bottomSheetDialog.dismiss()
+        }
+
+        bottomSheetDialog.show()
     }
 
     private fun addAccount() {
