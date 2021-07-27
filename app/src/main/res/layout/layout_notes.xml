@@ -30,8 +30,8 @@
             android:text="Tasks: 0/0" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/notes_recycler_view"
-            tools:listitem="@layout/note_cardview"
+            android:id="@+id/dates_recycler_view"
+            tools:listitem="@layout/date_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
     </LinearLayout>

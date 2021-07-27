@@ -1,7 +1,6 @@
 package com.rowaida.todo.presentation.activity
 
 import android.annotation.SuppressLint
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,18 +15,20 @@ import com.rowaida.todo.R
 import com.rowaida.todo.data.models.Note
 import com.rowaida.todo.data.models.Status
 import com.rowaida.todo.framework.ToDoViewModelFactory
-import com.rowaida.todo.presentation.adapter.NotesAdapter
+import com.rowaida.todo.presentation.adapter.DatesAdapter
 import com.rowaida.todo.presentation.viewModel.NoteViewModel
 import com.rowaida.todo.utils.ToDoConstants
 import kotlinx.coroutines.runBlocking
+import java.text.SimpleDateFormat
 import kotlin.math.roundToInt
 
 class NotesFragment : Fragment() {
 
     lateinit var username : String
     private lateinit var noteViewModel: NoteViewModel
-    private lateinit var notesAdapter : NotesAdapter
+    private lateinit var datesAdapter : DatesAdapter
     private lateinit var notes : List<Note>
+    private lateinit var notesHashMap: HashMap<String, MutableList<Note>>
     private lateinit var fragmentView : View
 
     override fun onCreateView(
@@ -37,14 +38,14 @@ class NotesFragment : Fragment() {
             R.layout.layout_notes, container, false
         )
 
-        //initializeButton()
-
         username = arguments?.getString(ToDoConstants.username).toString()
 
         noteViewModel = ViewModelProvider(this, ToDoViewModelFactory)
             .get(NoteViewModel::class.java)
 
         initializeList()
+
+        initializeHashMap()
 
         initializeProgressBar()
 
@@ -87,32 +88,47 @@ class NotesFragment : Fragment() {
                 else -> println("Invalid Tab")
             }
 
-            println(arguments?.getString(ToDoConstants.tabName) + ", NOTES: " + notes.toString())
+//            println(arguments?.getString(ToDoConstants.tabName) + ", NOTES: " + notes.toString())
+        }
+    }
+
+    private fun initializeHashMap() {
+        notesHashMap = HashMap()
+        val sdf = SimpleDateFormat("dd/MM/yyyy")
+        notes.forEach { note ->
+            val key = sdf.format(note.date)
+            if (notesHashMap.containsKey(key)) {
+                notesHashMap[key]?.add(note)
+            }
+            else {
+                notesHashMap[key] = mutableListOf(note)
+            }
         }
     }
 
     private fun initializeAdapter() {
 
         //val activity = (activity as NotesActivity)
-        notesAdapter = if (notes.isEmpty()) {
-            NotesAdapter(mutableListOf(), noteViewModel, activity as NotesActivity, arguments?.getString(ToDoConstants.tabName), username)
+        datesAdapter = if (notes.isEmpty()) {
+            DatesAdapter(HashMap(), arrayOf(), noteViewModel, activity as NotesActivity, arguments?.getString(ToDoConstants.tabName), username)
         }
         else {
-            NotesAdapter(notes as MutableList<Note>, noteViewModel, activity as NotesActivity, arguments?.getString(ToDoConstants.tabName), username)
+            DatesAdapter(notesHashMap, notesHashMap.keys.toTypedArray(), noteViewModel, activity as NotesActivity, arguments?.getString(ToDoConstants.tabName), username)
         }
 
-        val recyclerView: RecyclerView = fragmentView.findViewById(R.id.notes_recycler_view)!!
+        val recyclerView: RecyclerView = fragmentView.findViewById(R.id.dates_recycler_view)!!
         val recycle: RecyclerView.LayoutManager =
             LinearLayoutManager(activity?.applicationContext, LinearLayoutManager.VERTICAL, false)
         recyclerView.layoutManager = recycle
 
-        recyclerView.adapter = notesAdapter
+        recyclerView.adapter = datesAdapter
     }
 
     fun updateList(notes: List<Note>) {
         this.notes = notes
-        notesAdapter.update(notes)
-        println("NOTES AT UPDATE LIST IN FRAGMENT: $notes")
+        initializeHashMap()
+        datesAdapter.update(notesHashMap)
+//        println("NOTES AT UPDATE LIST IN FRAGMENT: $notes")
     }
 
 }

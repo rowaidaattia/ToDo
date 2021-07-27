@@ -1,6 +1,5 @@
 package com.rowaida.todo.presentation.adapter
 
-import android.content.res.Resources
 import android.view.*
 import android.view.LayoutInflater
 import android.widget.CheckBox
@@ -14,7 +13,6 @@ import com.rowaida.todo.presentation.activity.NotesInterface
 import com.rowaida.todo.presentation.viewModel.NoteViewModel
 import com.rowaida.todo.utils.ToDoStrings
 import kotlinx.coroutines.runBlocking
-import java.time.LocalDate
 import java.util.*
 
 
@@ -129,7 +127,6 @@ class NotesAdapter(private var notes: MutableList<Note>, val viewModel: NoteView
     }
 
     fun getUpdatedNotes(username: String) {
-        val x =  ToDoStrings.get(R.string.myTasks)
         runBlocking {
             val notesNonMutable : List<Note> =
                 when (tabName) {

@@ -26,6 +26,7 @@ import java.util.Date
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.*
+import kotlin.collections.HashMap
 
 
 open class NotesActivity : AppCompatActivity(), NotesInterface {
@@ -121,7 +122,7 @@ open class NotesActivity : AppCompatActivity(), NotesInterface {
                         description = "Description",
                         status = updateNote.status,
                         owner = updateNote.username,
-                        date = Calendar.getInstance().time
+                        date = updateNote.date
                     )
                 )
                 updateFragment(0, noteViewModel.getNotes(username))
