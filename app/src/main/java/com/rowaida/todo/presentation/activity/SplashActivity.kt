@@ -34,10 +34,12 @@ class SplashActivity : AppCompatActivity() {
 
             setBroadcast()
 
+            //FIXME rename login
             val login = ToDoSharedPreference(applicationContext).getValue(ToDoConstants.login)
             val accountType = ToDoSharedPreference(applicationContext).getValue(ToDoConstants.accountType)
 
             if (login != null) {
+                //FIXME move to another method
                 val bundle = Bundle()
                 bundle.putString(ToDoConstants.username, login)
                 if (AccountType.ADMIN == accountType?.let { AccountType.valueOf(it) }) {
