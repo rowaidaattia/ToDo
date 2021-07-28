@@ -14,13 +14,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="10dp" />
+
         <ProgressBar
             android:id="@+id/progressBar"
-            style="?android:attr/progressBarStyleHorizontal"
+            style="@style/StyleProgressBar"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
-
-            android:max="100" />
+            android:layout_height="20dp"
+            android:hapticFeedbackEnabled="false"
+            android:max="100"
+            android:progress="30" />
 
         <TextView
             android:id="@+id/progressText"

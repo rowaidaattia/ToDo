@@ -42,8 +42,8 @@
                 android:ellipsize="end"
                 android:inputType="textEmailAddress"
                 android:maxLines="1"
-                android:paddingLeft="5dp"
-                android:paddingStart="5dp"
+                android:paddingLeft="@dimen/padding"
+                android:paddingStart="@dimen/padding"
                 android:singleLine="true" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -66,8 +66,8 @@
                 android:background="#FFFFFF"
                 android:inputType="textPassword"
                 android:maxLines="1"
-                android:paddingLeft="5dp"
-                android:paddingStart="5dp"
+                android:paddingLeft="@dimen/padding"
+                android:paddingStart="@dimen/padding"
                 android:singleLine="true" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -80,7 +80,7 @@
             android:background="@color/teal_700"
             android:text="@string/login"
             android:textColor="@color/white"
-            android:textSize="16sp"
+            android:textSize="@dimen/fontSizeButton"
             app:backgroundTint="@color/teal_700" />
 
         <TextView
@@ -90,7 +90,7 @@
             android:layout_marginTop="5dp"
             android:gravity="center"
             android:text="@string/no_account"
-            android:textSize="16sp" />
+            android:textSize="@dimen/fontSizeButton" />
 
         <Button
             android:id="@+id/signup_button"
@@ -100,7 +100,7 @@
             android:text="@string/sign_up"
             android:background="@color/teal_200"
             android:textColor="@color/white"
-            android:textSize="16sp" />
+            android:textSize="@dimen/fontSizeButton" />
 
     </LinearLayout>
 

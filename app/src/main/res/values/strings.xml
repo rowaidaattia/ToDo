@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ToDo</string>
+    <string name="app_name" translatable="false">ToDo</string>
     <string name="login">Login</string>
     <string name="sign_up">Sign Up</string>
     <string name="username">Username</string>

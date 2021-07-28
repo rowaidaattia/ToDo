@@ -45,8 +45,8 @@
                     android:inputType="textEmailAddress"
                     android:background="#FFFFFF"
                     android:maxLines="1"
-                    android:paddingLeft="5dp"
-                    android:paddingStart="5dp"
+                    android:paddingLeft="@dimen/padding"
+                    android:paddingStart="@dimen/padding"
                     android:singleLine="true" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -68,8 +68,8 @@
                     android:inputType="textEmailAddress"
                     android:background="#FFFFFF"
                     android:maxLines="1"
-                    android:paddingLeft="5dp"
-                    android:paddingStart="5dp"
+                    android:paddingLeft="@dimen/padding"
+                    android:paddingStart="@dimen/padding"
                     android:singleLine="true" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -91,8 +91,8 @@
                     android:background="#FFFFFF"
                     android:inputType="textPassword"
                     android:maxLines="1"
-                    android:paddingLeft="5dp"
-                    android:paddingStart="5dp"
+                    android:paddingLeft="@dimen/padding"
+                    android:paddingStart="@dimen/padding"
                     android:singleLine="true" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -115,8 +115,8 @@
                     android:inputType="date"
                     android:background="#FFFFFF"
                     android:maxLines="1"
-                    android:paddingLeft="5dp"
-                    android:paddingStart="5dp"
+                    android:paddingLeft="@dimen/padding"
+                    android:paddingStart="@dimen/padding"
                     android:singleLine="true" />
 
             </com.google.android.material.textfield.TextInputLayout>
@@ -150,7 +150,7 @@
                 android:backgroundTint="@color/teal_700"
                 android:text="@string/sign_up"
                 android:textColor="@color/white"
-                android:textSize="16sp"
+                android:textSize="@dimen/fontSizeButton"
                 app:backgroundTint="@color/teal_700" />
 
         </LinearLayout>
