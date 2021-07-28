@@ -16,8 +16,10 @@ import com.rowaida.todo.utils.ToDoToast
 
 class LoginActivity : AppCompatActivity() {
 
+    //FIXME rename this to be userViewModel
     private lateinit var viewModel: UserViewModel
     private lateinit var loginButton : Button
+    //FIXME typo
     private lateinit var signupButton : Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,6 +78,7 @@ class LoginActivity : AppCompatActivity() {
     //FIXME rename this method to be onLoginClicked() to describe an event
     private fun loginCLicked() {
 
+        //FIXME you should not init UI on every time user clicks on the button, UI should be init once
         val usernameOrEmail = findViewById<EditText>(R.id.username_login).text.toString()
         val password = findViewById<EditText>(R.id.password_login).text.toString()
 

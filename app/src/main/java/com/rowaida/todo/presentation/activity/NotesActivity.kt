@@ -34,6 +34,7 @@ open class NotesActivity : AppCompatActivity(), NotesInterface {
     lateinit var noteViewModel: NoteViewModel
     lateinit var userViewModel: UserViewModel
     private lateinit var tabViewpager: ViewPager
+    //FIXME typo
     private lateinit var tabTablayout: TabLayout
     private lateinit var tabToolbar: Toolbar
 
@@ -111,6 +112,7 @@ open class NotesActivity : AppCompatActivity(), NotesInterface {
             getString(R.string.update)
         ) { _, _ -> //What ever you want to do with the value
 
+            //FIXME this should be moved to another method
             runBlocking {
                 noteViewModel.updateNote(
                     Note(
@@ -138,6 +140,7 @@ open class NotesActivity : AppCompatActivity(), NotesInterface {
     }
 
     fun logout() {
+        //FIXME why using applicationContext not this?
         ToDoSharedPreference(applicationContext).remove(ToDoConstants.login)
         this.finish()
         ToDoNavigation.goToActivity(null, this, LoginActivity::class.java)
@@ -152,6 +155,7 @@ open class NotesActivity : AppCompatActivity(), NotesInterface {
         val description = bottomSheetDialog.findViewById<TextInputEditText>(R.id.task_description)
 
         save?.setOnClickListener {
+            //FIXME this should be moved to another method
             runBlocking {
                 noteViewModel.addNote(
                     Note(

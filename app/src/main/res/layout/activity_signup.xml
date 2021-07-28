@@ -122,6 +122,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <RadioGroup
+                android:id="@+id/gender"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 

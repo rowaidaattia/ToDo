@@ -62,10 +62,12 @@ class NotesFragment : Fragment() {
                 curr++
             }
         }
+        //FIXME Hardcoded string
         fragmentView.findViewById<TextView>(R.id.progressText).text = "Task(s): $curr/${max.roundToInt()}"
         return ((curr / max) * 100).toInt()
     }
 
+    //FIXME remove commented code
     @SuppressLint("ResourceAsColor")
     fun initializeProgressBar() {
         val progressBar = fragmentView.findViewById<ProgressBar>(R.id.progressBar)
@@ -109,6 +111,7 @@ class NotesFragment : Fragment() {
     private fun initializeAdapter() {
 
         //val activity = (activity as NotesActivity)
+        //FIXME why do you init the adapter when the list is empty ?
         datesAdapter = if (notes.isEmpty()) {
             DatesAdapter(HashMap(), arrayOf(), noteViewModel, activity as NotesActivity, arguments?.getString(ToDoConstants.tabName), username)
         }

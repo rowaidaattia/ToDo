@@ -16,7 +16,7 @@ import com.rowaida.todo.presentation.adapter.ViewPagerAdapter
 import kotlinx.coroutines.runBlocking
 import java.util.*
 
-
+//FIXME fix warnings
 class NotesAdminActivity : NotesActivity() {
 
     override fun setupViewPager(viewpager: ViewPager) {
@@ -33,6 +33,7 @@ class NotesAdminActivity : NotesActivity() {
         return true
     }
 
+    //FIXME all methods that happen after user clicks on button/menu/.... should be named onButtonFunctionClicked() like onLogoutClicked() onAddMyNoteClicked to represent user action
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.logout_admin_button -> {
@@ -61,10 +62,13 @@ class NotesAdminActivity : NotesActivity() {
 
     private fun assignNote() {
 
-        val users = runBlocking {
+
+        val users = //FIXME move this to another method
+             runBlocking {
             userViewModel.getSubAccounts(username).toTypedArray()
         }
 
+        //FIXME move bottom sheet init to another method
         val bottomSheetDialog = BottomSheetDialog(this)
         bottomSheetDialog.setContentView(R.layout.bottom_sheet_assign_task)
         val assign = bottomSheetDialog.findViewById<Button>(R.id.assign_button)
@@ -82,7 +86,9 @@ class NotesAdminActivity : NotesActivity() {
             spinner?.adapter = adapter
         }
 
+
         assign?.setOnClickListener {
+            //FIXME move this to another method
             runBlocking {
                 noteViewModel.addNote(
                     Note(
@@ -111,13 +117,16 @@ class NotesAdminActivity : NotesActivity() {
         builder.setTitle(getString(R.string.chooseUser))
 
         // add a radio button list
-        val users = runBlocking {
+        val users =//FIXME move this to another method
+            runBlocking {
             userViewModel.getAccounts(username).toTypedArray()
         }
         var subAccount = users[0]
+        //FIXME why do you need this val ?
         val checkedItem = 0
         builder.setSingleChoiceItems(users, checkedItem) { dialog, which ->
             // user checked an item
+            //FIXME rename which
             subAccount = users[which]
         }
 
@@ -125,6 +134,7 @@ class NotesAdminActivity : NotesActivity() {
         // add OK and Cancel buttons
         builder.setPositiveButton(getString(R.string.ok)) { dialog, which ->
             // user clicked OK
+
             userViewModel.addSubAccount(username, subAccount)
         }
         builder.setNegativeButton(getString(R.string.cancel), null)

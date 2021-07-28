@@ -7,6 +7,7 @@ import android.text.TextUtils
 import android.widget.Button
 import android.widget.EditText
 import android.widget.RadioButton
+import android.widget.RadioGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.*
 import com.google.android.material.datepicker.MaterialDatePicker
@@ -27,7 +28,9 @@ import java.util.*
 @Suppress("NAME_SHADOWING")
 class SignupActivity : AppCompatActivity() {
 
+    //FIXME rename it to be userViewModel
     private lateinit var viewModel: UserViewModel
+    //FIXME typo
     private lateinit var signupButton : Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,6 +47,7 @@ class SignupActivity : AppCompatActivity() {
     }
 
     private fun initializeButton() {
+        //FIXME rename signup_button2
         signupButton = findViewById(R.id.signup_button2)
 
         signupButton.setOnClickListener {
@@ -51,7 +55,7 @@ class SignupActivity : AppCompatActivity() {
         }
     }
 
-    @SuppressLint("ResourceAsColor")
+     @SuppressLint("ResourceAsColor")
     private fun initializeDatePicker() {
         val birthdayText: TextInputEditText? = findViewById(R.id.birthday)
         val outputDateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).apply {
@@ -61,6 +65,7 @@ class SignupActivity : AppCompatActivity() {
         birthdayText?.inputType = InputType.TYPE_NULL
         birthdayText?.setTextColor(R.color.black)
         birthdayText?.setOnClickListener {
+            // FIXME move datepicker init to utils
             val datePicker =
                 MaterialDatePicker.Builder.datePicker()
                     .setTitleText("Select date")
@@ -74,7 +79,8 @@ class SignupActivity : AppCompatActivity() {
         }
     }
 
-    private fun check(text: String, error: TextInputLayout) : Boolean {
+    //FIXME rename
+     private fun check(text: String, error: TextInputLayout) : Boolean {
         return if (TextUtils.isEmpty(text)) {
             error.error = getString(R.string.missing_fields)
             false
@@ -84,9 +90,10 @@ class SignupActivity : AppCompatActivity() {
         }
     }
 
+    //FIXME typo
     @SuppressLint("SimpleDateFormat")
     private fun signupClicked() {
-
+        //FIXME you should not init UI on every time user clicks on the button, UI should be init once
         val username = findViewById<EditText>(R.id.username_signup).text.toString()
         val password = findViewById<EditText>(R.id.password_signup).text.toString()
         val email = findViewById<EditText>(R.id.email_signup).text.toString()
