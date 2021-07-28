@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginStart="10dp"
-            android:text="Assign Note"
+            android:text="@string/assignNote"
             android:textSize="20sp"
             android:textStyle="bold" />
 
@@ -26,7 +26,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:hint="Name"
+            android:hint="@string/name"
             app:hintAnimationEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -48,7 +48,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:hint="Description"
+            android:hint="@string/description"
             app:hintAnimationEnabled="true">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -76,7 +76,7 @@
             android:layout_height="50dp"
             android:layout_margin="10dp"
             android:background="@color/teal_700"
-            android:text="assign"
+            android:text="@string/assignedTasks"
             android:textColor="@color/white"
             android:textSize="16sp"
             app:backgroundTint="@color/teal_700" />

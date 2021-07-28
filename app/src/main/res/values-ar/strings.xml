@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="login">تسجيل الدخول</string>
+    <string name="sign_up">اشتراك</string>
+    <string name="username">اسم االمستخدم</string>
+    <string name="password">البريد الالكتروني</string>
+    <string name="username_email">اسم المستخدم أو البريد الالكتروني</string>
+    <string name="add_note">اضف ملاحظة</string>
+    <string name="help">مساعدة</string>
+    <string name="logout">تسجيل خروج</string>
+    <string name="status">الحالة</string>
+    <string name="test">اختبار</string>
+    <string name="birthday">عيد الميلاد</string>
+    <string name="email">البريد الإلكتروني</string>
+    <string name="male">الذكر</string>
+    <string name="female">أنثى</string>
+    <string name="invalid_credentials">بيانات اعتماد تسجيل الدخول غير صحيحة</string>
+    <string name="missing_fields">لو سمحت أملأ كل الحقول</string>
+    <string name="exist_credentials">أوراق الاعتماد موجودة بالفعل</string>
+    <string name="cancel">إلغاء</string>
+    <string name="save">حفظ</string>
+    <string name="update">تحديث</string>
+    <string name="myTasks">مهامي</string>
+    <string name="subAccountTasks">مهام الحسابات الفرعية</string>
+    <string name="assignedTasks">المهام المعينة</string>
+    <string name="done">فعله</string>
+    <string name="ok">حسنا</string>
+    <string name="next">التالي</string>
+    <string name="editNote">تحرير مذكرة</string>
+    <string name="chooseUser">اختر المستخدم</string>
+    <string name="no_account">ليس لديك حساب؟</string>
+    <string name="missing_usernameOrEmail">الرجاء إدخال اسم المستخدم أو البريد الإلكتروني الخاص بك</string>
+    <string name="missing_password">من فضلك أدخل رقمك السري</string>
+    <string name="gender">جنس تذكير أو تأنيث</string>
+    <string name="assign">تعيين</string>
+    <string name="enterNote">أدخل ملاحظة</string>
+    <string name="assignNote">تعيين ملاحظة</string>
+    <string name="name">اسم</string>
+    <string name="description">وصف</string>
+</resources>

@@ -14,7 +14,7 @@
     <string name="email">E-mail</string>
     <string name="male">Male</string>
     <string name="female">Female</string>
-    <string name="preference_file_key">com.rowaida.todo.PREFERENCE_FILE_KEY</string>
+    <string name="preference_file_key" translatable="false">com.rowaida.todo.PREFERENCE_FILE_KEY</string>
     <string name="invalid_credentials">Incorrect login credentials</string>
     <string name="missing_fields">Please fill all fields</string>
     <string name="exist_credentials">Credentials already exist</string>
@@ -27,11 +27,15 @@
     <string name="done">done</string>
     <string name="ok">ok</string>
     <string name="next">next</string>
-    <string name="enterNote">Enter Note</string>
     <string name="editNote">Edit Note</string>
     <string name="chooseUser">Choose User</string>
     <string name="no_account">Don\'t have an account?</string>
     <string name="missing_usernameOrEmail">Please enter your username or email</string>
     <string name="missing_password">Please enter your password</string>
     <string name="gender">Gender</string>
+    <string name="assign">assign</string>
+    <string name="enterNote">Enter Note</string>
+    <string name="assignNote">Assign Note</string>
+    <string name="name">Name</string>
+    <string name="description">Description</string>
 </resources>
