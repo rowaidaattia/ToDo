@@ -69,8 +69,8 @@ class NotesFragment : Fragment() {
     @SuppressLint("ResourceAsColor")
     fun initializeProgressBar() {
         val progressBar = fragmentView.findViewById<ProgressBar>(R.id.progressBar)
-        progressBar.progressDrawable.setColorFilter(
-            R.color.teal_200, android.graphics.PorterDuff.Mode.SRC_IN)
+//        progressBar.progressDrawable.setColorFilter(
+//            R.color.teal_200, android.graphics.PorterDuff.Mode.SRC_IN)
         progressBar.progress = getCurrentProgress()
     }
 
