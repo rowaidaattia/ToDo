@@ -8,6 +8,7 @@ interface UserDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun addUser(user: UserEntity) : Long
 
+    //FIXME rename this method to be isUserExists() to be more meaningful
     @Query("SELECT EXISTS(SELECT * FROM User WHERE " +
             "(username = :usernameOrEmail OR email = :usernameOrEmail) AND password = :password)")
     fun checkUser(usernameOrEmail: String, password: String) : Boolean

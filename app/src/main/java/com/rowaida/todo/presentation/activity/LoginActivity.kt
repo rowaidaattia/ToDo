@@ -73,6 +73,7 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    //FIXME rename this method to be onLoginClicked() to describe an event
     private fun loginCLicked() {
 
         val usernameOrEmail = findViewById<EditText>(R.id.username_login).text.toString()

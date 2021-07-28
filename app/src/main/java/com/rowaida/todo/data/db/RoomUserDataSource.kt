@@ -21,9 +21,11 @@ class RoomUserDataSource (context: Context) : UserDataSource {
             user.accountType.toString()
         ))
 
+    //FIXME check what ?
     override suspend fun check(usernameOrEmail: String, password: String): Boolean =
         userDao.checkUser(usernameOrEmail, password)
 
+    //FIXME get what?
     override suspend fun get(usernameOrEmail: String): String =
         userDao.getUsername(usernameOrEmail)
 
