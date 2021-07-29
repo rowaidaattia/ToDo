@@ -6,6 +6,6 @@ interface NotesInterface {
 
     fun updateFragment(item: Int?, notes: List<Note>)
 
-    fun editNote(updateNote: Note)
+    fun onEditNoteClicked(updateNote: Note)
 
 }

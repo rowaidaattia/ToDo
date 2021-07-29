@@ -7,10 +7,8 @@ import android.text.TextUtils
 import android.widget.Button
 import android.widget.EditText
 import android.widget.RadioButton
-import android.widget.RadioGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.*
-import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.rowaida.todo.R
@@ -19,6 +17,7 @@ import com.rowaida.todo.data.models.Gender
 import com.rowaida.todo.data.models.User
 import com.rowaida.todo.framework.ToDoViewModelFactory
 import com.rowaida.todo.presentation.viewModel.UserViewModel
+import com.rowaida.todo.utils.ToDoDatePicker
 import com.rowaida.todo.utils.ToDoNavigation
 import com.rowaida.todo.utils.ToDoToast
 import java.text.SimpleDateFormat
@@ -28,30 +27,44 @@ import java.util.*
 @Suppress("NAME_SHADOWING")
 class SignupActivity : AppCompatActivity() {
 
-    //FIXME rename it to be userViewModel
-    private lateinit var viewModel: UserViewModel
-    //FIXME typo
-    private lateinit var signupButton : Button
+    private lateinit var userViewModel: UserViewModel
+    private lateinit var signUpButton : Button
+    private lateinit var username : EditText
+    private lateinit var password : EditText
+    private lateinit var email : EditText
+    private lateinit var birthday : EditText
+    private lateinit var male : RadioButton
+    private lateinit var female : RadioButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_signup)
 
-        viewModel = ViewModelProvider(this, ToDoViewModelFactory)
+        userViewModel = ViewModelProvider(this, ToDoViewModelFactory)
                 .get(UserViewModel::class.java)
 
         initializeButton()
 
         initializeDatePicker()
 
+        initializeFields()
+
+    }
+
+    private fun initializeFields() {
+        username = findViewById(R.id.username_signUp)
+        password = findViewById(R.id.password_signUp)
+        email = findViewById(R.id.email_signUp)
+        birthday = findViewById(R.id.birthday)
+        male = findViewById(R.id.male)
+        female = findViewById(R.id.female)
     }
 
     private fun initializeButton() {
-        //FIXME rename signup_button2
-        signupButton = findViewById(R.id.signup_button2)
+        signUpButton = findViewById(R.id.signUp_button)
 
-        signupButton.setOnClickListener {
-            signupClicked()
+        signUpButton.setOnClickListener {
+            signUpClicked()
         }
     }
 
@@ -65,12 +78,7 @@ class SignupActivity : AppCompatActivity() {
         birthdayText?.inputType = InputType.TYPE_NULL
         birthdayText?.setTextColor(R.color.black)
         birthdayText?.setOnClickListener {
-            // FIXME move datepicker init to utils
-            val datePicker =
-                MaterialDatePicker.Builder.datePicker()
-                    .setTitleText("Select date")
-                    .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
-                    .build()
+            val datePicker = ToDoDatePicker.setDatePicker()
 
             datePicker.addOnPositiveButtonClickListener {
                 birthdayText.setText(outputDateFormat.format(it))
@@ -79,8 +87,7 @@ class SignupActivity : AppCompatActivity() {
         }
     }
 
-    //FIXME rename
-     private fun check(text: String, error: TextInputLayout) : Boolean {
+     private fun checkEmptyField(text: String, error: TextInputLayout) : Boolean {
         return if (TextUtils.isEmpty(text)) {
             error.error = getString(R.string.missing_fields)
             false
@@ -90,30 +97,24 @@ class SignupActivity : AppCompatActivity() {
         }
     }
 
-    //FIXME typo
     @SuppressLint("SimpleDateFormat")
-    private fun signupClicked() {
-        //FIXME you should not init UI on every time user clicks on the button, UI should be init once
-        val username = findViewById<EditText>(R.id.username_signup).text.toString()
-        val password = findViewById<EditText>(R.id.password_signup).text.toString()
-        val email = findViewById<EditText>(R.id.email_signup).text.toString()
-        val birthday = findViewById<EditText>(R.id.birthday).text.toString()
-        val male = findViewById<RadioButton>(R.id.male).isChecked
-        val female = findViewById<RadioButton>(R.id.female).isChecked
+    private fun signUpClicked() {
 
-        val checkUser = check(username, findViewById(R.id.usernameError2))
-        val checkEmail = check(email, findViewById(R.id.emailError2))
-        val checkPass = check(password, findViewById(R.id.passError2))
-        val checkBirth = check(birthday, findViewById(R.id.birthError2))
+        val checkUser = checkEmptyField(username.text.toString(), findViewById(R.id.usernameError_signUp))
+        val checkEmail = checkEmptyField(email.text.toString(), findViewById(R.id.emailError_signUp))
+        val checkPass = checkEmptyField(password.text.toString(), findViewById(R.id.passError_signUp))
+        val checkBirth = checkEmptyField(birthday.text.toString(), findViewById(R.id.birthError_signUp))
 
-        if (checkUser && checkEmail && checkPass && checkBirth && (male || female)) {
+        if (checkUser && checkEmail && checkPass && checkBirth && (male.isChecked || female.isChecked)) {
             //add user
-            val gender = if (male) Gender.MALE else Gender.FEMALE
-            val date = SimpleDateFormat("dd/MM/yyyy").parse(birthday)
-            val user = User(username, password, gender, email, date, username, AccountType.ADMIN)
+            val gender = if (male.isChecked) Gender.MALE else Gender.FEMALE
+            val date = SimpleDateFormat("dd/MM/yyyy").parse(birthday.text.toString())
+            val user = User(username.text.toString(), password.text.toString(), gender,
+                email.text.toString(), date, username.text.toString(), AccountType.ADMIN)
 
-            if (viewModel.addUser(user).toInt() != -1) {
-                ToDoNavigation.goToNotes(username, AccountType.ADMIN.toString(), this, NotesAdminActivity::class.java)
+            if (userViewModel.addUser(user).toInt() != -1) {
+                ToDoNavigation.goToNotes(username.text.toString(), AccountType.ADMIN.toString(),
+                    this, NotesAdminActivity::class.java)
             }
             else {
                 ToDoToast.toast(applicationContext, applicationContext.getString(R.string.exist_credentials))

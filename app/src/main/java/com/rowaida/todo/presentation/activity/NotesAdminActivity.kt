@@ -16,7 +16,6 @@ import com.rowaida.todo.presentation.adapter.ViewPagerAdapter
 import kotlinx.coroutines.runBlocking
 import java.util.*
 
-//FIXME fix warnings
 class NotesAdminActivity : NotesActivity() {
 
     override fun setupViewPager(viewpager: ViewPager) {
@@ -33,42 +32,39 @@ class NotesAdminActivity : NotesActivity() {
         return true
     }
 
-    //FIXME all methods that happen after user clicks on button/menu/.... should be named onButtonFunctionClicked() like onLogoutClicked() onAddMyNoteClicked to represent user action
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.logout_admin_button -> {
-                logout()
+                onLogoutClicked()
                 true
             }
             R.id.add_admin_button -> {
-                addMyNote()
+                onAddMyNoteClicked()
                 true
             }
             R.id.assign_button -> {
-                assignNote()
+                onAssignNoteClicked()
                 true
             }
             R.id.add_account_button -> {
-                addAccount()
+                onAddAccountClicked()
                 true
             }
             R.id.delete_admin_button -> {
-                deleteAllNotes()
+                onDeleteAllNotesClicked()
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
     }
 
-    private fun assignNote() {
-
-
-        val users = //FIXME move this to another method
-             runBlocking {
+    private fun getSubAccounts() : Array<String> {
+        return runBlocking {
             userViewModel.getSubAccounts(username).toTypedArray()
         }
+    }
 
-        //FIXME move bottom sheet init to another method
+    private fun initializeAssignBottomSheet(users: Array<String>) {
         val bottomSheetDialog = BottomSheetDialog(this)
         bottomSheetDialog.setContentView(R.layout.bottom_sheet_assign_task)
         val assign = bottomSheetDialog.findViewById<Button>(R.id.assign_button)
@@ -88,19 +84,8 @@ class NotesAdminActivity : NotesActivity() {
 
 
         assign?.setOnClickListener {
-            //FIXME move this to another method
-            runBlocking {
-                noteViewModel.addNote(
-                    Note(
-                        username = spinner?.selectedItem.toString(),
-                        name = name?.text.toString(),
-                        description = description?.text.toString(),
-                        status = Status.IN_PROGRESS,
-                        owner = username,
-                        date = Calendar.getInstance().time
-                    ))
-                updateFragment(1, noteViewModel.getSubAccountsNotes(username))
-            }
+            onAssignClicked(spinner?.selectedItem.toString(), name?.text.toString(), description?.text.toString())
+
             bottomSheetDialog.dismiss()
         }
 
@@ -111,30 +96,53 @@ class NotesAdminActivity : NotesActivity() {
         bottomSheetDialog.show()
     }
 
-    private fun addAccount() {
+    private fun onAssignNoteClicked() {
+
+        val users = getSubAccounts()
+
+        initializeAssignBottomSheet(users)
+
+    }
+
+    private fun onAssignClicked(username: String, name: String, description: String) {
+        runBlocking {
+            noteViewModel.addNote(
+                Note(
+                    username = username,
+                    name = name,
+                    description = description,
+                    status = Status.IN_PROGRESS,
+                    owner = username,
+                    date = Calendar.getInstance().time
+                ))
+            updateFragment(1, noteViewModel.getSubAccountsNotes(username))
+        }
+    }
+
+    private fun getAccounts() : Array<String> {
+        return runBlocking {
+            userViewModel.getAccounts(username).toTypedArray()
+        }
+    }
+
+    private fun onAddAccountClicked() {
         // setup the alert builder
         val builder = AlertDialog.Builder(this)
         builder.setTitle(getString(R.string.chooseUser))
 
         // add a radio button list
-        val users =//FIXME move this to another method
-            runBlocking {
-            userViewModel.getAccounts(username).toTypedArray()
-        }
-        var subAccount = users[0]
-        //FIXME why do you need this val ?
-        val checkedItem = 0
-        builder.setSingleChoiceItems(users, checkedItem) { dialog, which ->
-            // user checked an item
-            //FIXME rename which
-            subAccount = users[which]
-        }
+        val users = getAccounts()
 
+        var subAccount = users[0]
+
+        builder.setSingleChoiceItems(users, 0) { _, index ->
+            // user checked an item
+            subAccount = users[index]
+        }
 
         // add OK and Cancel buttons
-        builder.setPositiveButton(getString(R.string.ok)) { dialog, which ->
+        builder.setPositiveButton(getString(R.string.ok)) { _, _ ->
             // user clicked OK
-
             userViewModel.addSubAccount(username, subAccount)
         }
         builder.setNegativeButton(getString(R.string.cancel), null)

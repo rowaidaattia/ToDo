@@ -39,7 +39,7 @@ class NotesAdapter(private var notes: MutableList<Note>, val viewModel: NoteView
         private fun initializeEdit() {
             editButton.setOnClickListener {
                 val updateNote = notes[adapterPosition]
-                notesInterface.editNote(updateNote)
+                notesInterface.onEditNoteClicked(updateNote)
             }
         }
 

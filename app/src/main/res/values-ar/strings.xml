@@ -37,4 +37,5 @@
     <string name="assignNote">تعيين ملاحظة</string>
     <string name="name">اسم</string>
     <string name="description">وصف</string>
+    <string name="tasks">مهام:</string>
 </resources>

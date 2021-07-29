@@ -16,43 +16,53 @@ import com.rowaida.todo.utils.ToDoToast
 
 class LoginActivity : AppCompatActivity() {
 
-    //FIXME rename this to be userViewModel
-    private lateinit var viewModel: UserViewModel
+    private lateinit var userViewModel: UserViewModel
     private lateinit var loginButton : Button
-    //FIXME typo
-    private lateinit var signupButton : Button
+    private lateinit var signUpButton : Button
+    private lateinit var emailError : TextInputLayout
+    private lateinit var passwordError : TextInputLayout
+    private lateinit var usernameOrEmail: EditText
+    private lateinit var password: EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        viewModel = ViewModelProvider(this, ToDoViewModelFactory)
+        userViewModel = ViewModelProvider(this, ToDoViewModelFactory)
             .get(UserViewModel::class.java)
 
         initializeButtons()
+
+        initializeFields()
+    }
+
+    private fun initializeFields() {
+        emailError = findViewById(R.id.emailError)
+        passwordError = findViewById(R.id.passError)
+        usernameOrEmail = findViewById(R.id.username_login)
+        password = findViewById(R.id.password_login)
     }
 
     private fun initializeButtons() {
         loginButton = findViewById(R.id.login_button)
 
         loginButton.setOnClickListener {
-            loginCLicked()
+            onLoginClicked()
         }
 
-        signupButton = findViewById(R.id.signup_button)
+        signUpButton = findViewById(R.id.go_to_signUp)
 
-        signupButton.setOnClickListener {
-            signupClicked()
+        signUpButton.setOnClickListener {
+            onSignUpClicked()
         }
 
     }
 
-    private fun signupClicked() {
-        ToDoNavigation.goToActivity(null, this, SignupActivity::class.java)
+    private fun onSignUpClicked() {
+        ToDoNavigation.goToActivity(context = this, activityClass = SignupActivity::class.java)
     }
 
     private fun checkUsernameOrEmail(usernameOrEmail: String) : Boolean {
-        val emailError = findViewById<TextInputLayout>(R.id.emailError)
 
         return if (TextUtils.isEmpty(usernameOrEmail)) {
             emailError.error = getString(R.string.missing_usernameOrEmail)
@@ -64,31 +74,25 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun checkPassword(password: String) : Boolean {
-        val passError = findViewById<TextInputLayout>(R.id.passError)
 
         return if (TextUtils.isEmpty(password)) {
-            passError.error = getString(R.string.missing_password)
+            passwordError.error = getString(R.string.missing_password)
             false
         } else {
-            passError.error = null
+            passwordError.error = null
             true
         }
     }
 
-    //FIXME rename this method to be onLoginClicked() to describe an event
-    private fun loginCLicked() {
+    private fun onLoginClicked() {
 
-        //FIXME you should not init UI on every time user clicks on the button, UI should be init once
-        val usernameOrEmail = findViewById<EditText>(R.id.username_login).text.toString()
-        val password = findViewById<EditText>(R.id.password_login).text.toString()
-
-        val checkUser = checkUsernameOrEmail(usernameOrEmail)
-        val checkPass = checkPassword(password)
+        val checkUser = checkUsernameOrEmail(usernameOrEmail.text.toString())
+        val checkPass = checkPassword(password.text.toString())
 
         if (checkUser && checkPass) {
-            if (viewModel.checkUser(usernameOrEmail, password)) {
-                val username = viewModel.getUsername(usernameOrEmail)
-                when(viewModel.getAccountType(username)) {
+            if (userViewModel.checkUser(usernameOrEmail.text.toString(), password.text.toString())) {
+                val username = userViewModel.getUsername(usernameOrEmail.text.toString())
+                when(userViewModel.getAccountType(username)) {
                     AccountType.ADMIN ->
                         ToDoNavigation.goToNotes(username, AccountType.ADMIN.toString(), this, NotesAdminActivity::class.java)
                     AccountType.SUB_ACCOUNT ->

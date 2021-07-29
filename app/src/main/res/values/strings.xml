@@ -38,4 +38,5 @@
     <string name="assignNote">Assign Note</string>
     <string name="name">Name</string>
     <string name="description">Description</string>
+    <string name="tasks">Tasks: </string>
 </resources>

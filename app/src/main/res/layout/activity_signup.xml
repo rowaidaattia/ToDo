@@ -19,7 +19,7 @@
             android:layout_gravity="center"
             android:layout_margin="5dp"
             android:orientation="vertical"
-            tools:context=".presentation.activity.SignupActivity">
+            tools:context=".presentation.activity.SignUpActivity">
 
             <ImageView
                 android:id="@+id/profile"
@@ -29,14 +29,14 @@
                 android:src="@drawable/logo" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/emailError2"
+                android:id="@+id/emailError_signUp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:hintAnimationEnabled="true"
                 android:layout_marginTop="5dp">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/email_signup"
+                    android:id="@+id/email_signUp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
@@ -52,14 +52,14 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/usernameError2"
+                android:id="@+id/usernameError_signUp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:hintAnimationEnabled="true"
                 android:layout_marginTop="5dp">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/username_signup"
+                    android:id="@+id/username_signUp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
@@ -75,7 +75,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/passError2"
+                android:id="@+id/passError_signUp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
@@ -83,7 +83,7 @@
                 app:passwordToggleEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/password_signup"
+                    android:id="@+id/password_signUp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
@@ -98,7 +98,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/birthError2"
+                android:id="@+id/birthError_signUp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
@@ -143,7 +143,7 @@
             </RadioGroup>
 
             <Button
-                android:id="@+id/signup_button2"
+                android:id="@+id/signUp_button"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_margin="20dp"

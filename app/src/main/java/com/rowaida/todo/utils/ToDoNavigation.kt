@@ -6,8 +6,7 @@ import android.os.Bundle
 
 object ToDoNavigation {
 
-    //FIXME you can make bundle default value to null so you don't need to pass null every time you call the method
-    fun goToActivity(bundle: Bundle?, context: Context, activityClass: Class<*>) {
+    fun goToActivity(bundle: Bundle? = null, context: Context, activityClass: Class<*>) {
         val intent = Intent(context, activityClass)
         if (bundle != null) {
             intent.putExtras(bundle)

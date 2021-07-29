@@ -8,13 +8,13 @@ import com.rowaida.todo.domain.repositoryInterface.UserRepository
 class UserRepositoryImp (private val userDataSource: UserDataSource) :
     UserRepository {
 
-    override suspend fun addUser(user: User) : Long = userDataSource.add(user)
+    override suspend fun addUser(user: User) : Long = userDataSource.addUser(user)
 
     override suspend fun checkUser(usernameOrEmail: String, password: String) : Boolean =
-        userDataSource.check(usernameOrEmail, password)
+        userDataSource.checkValidCredentials(usernameOrEmail, password)
 
     override suspend fun getUsername(usernameOrEmail: String): String =
-        userDataSource.get(usernameOrEmail)
+        userDataSource.getUsername(usernameOrEmail)
 
     override suspend fun addSubAccount(admin: String, subAccount: String) =
         userDataSource.addSubAccount(admin, subAccount)

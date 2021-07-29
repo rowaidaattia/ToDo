@@ -25,15 +25,15 @@ class NotesSubAccountActivity : NotesActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.logout_subaccount_button -> {
-                logout()
+                onLogoutClicked()
                 true
             }
             R.id.add_subaccount_button -> {
-                addMyNote()
+                onAddMyNoteClicked()
                 true
             }
             R.id.delete_subaccount_button -> {
-                deleteAllNotes()
+                onDeleteAllNotesClicked()
                 true
             }
             else -> super.onOptionsItemSelected(item)

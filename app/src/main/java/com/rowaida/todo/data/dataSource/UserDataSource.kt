@@ -5,11 +5,11 @@ import com.rowaida.todo.data.models.User
 
 interface UserDataSource {
 
-    suspend fun add(user: User) : Long
+    suspend fun addUser(user: User) : Long
 
-    suspend fun check(usernameOrEmail: String, password: String) : Boolean
+    suspend fun checkValidCredentials(usernameOrEmail: String, password: String) : Boolean
 
-    suspend fun get(usernameOrEmail: String) : String
+    suspend fun getUsername(usernameOrEmail: String) : String
 
     suspend fun addSubAccount(admin: String, subAccount: String)
 

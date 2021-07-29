@@ -8,7 +8,7 @@ interface UserWithNotesDao {
     //@RewriteQueriesToDropUnusedColumns
     @Transaction
     @Query("SELECT * FROM Note WHERE username = :username AND owner = :username")
-    fun getNotes(username: String): List<UserWithNotes>
+    fun getUserNotes(username: String): List<UserWithNotes>
 
     @Transaction
     @Query("SELECT * FROM Note WHERE username = :username AND owner <> :username")

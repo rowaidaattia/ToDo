@@ -10,7 +10,7 @@ class RoomNoteDataSource (context: Context) : NoteDataSource {
     private val noteDao = ToDoDatabase.getInstance(context).noteDao()
     private val userWithNotesDao = ToDoDatabase.getInstance(context).userWithNotesDao()
 
-    override suspend fun add(note: Note) =
+    override suspend fun addNote(note: Note) =
         noteDao.addNote(
             NoteEntity(
                 note.id,
@@ -22,7 +22,7 @@ class RoomNoteDataSource (context: Context) : NoteDataSource {
                 note.date
         ))
 
-    override suspend fun remove(note: Note) =
+    override suspend fun removeNote(note: Note) =
         noteDao.removeNote(
             NoteEntity(
                 note.id,
@@ -34,7 +34,7 @@ class RoomNoteDataSource (context: Context) : NoteDataSource {
                 note.date
             ))
 
-    override suspend fun update(note: Note) =
+    override suspend fun updateNote(note: Note) =
         noteDao.updateNote(
             NoteEntity(
                 note.id,
@@ -46,10 +46,10 @@ class RoomNoteDataSource (context: Context) : NoteDataSource {
                 note.date
             ))
 
-    override suspend fun get(username: String): List<Note> {
+    override suspend fun getUserNotes(username: String): List<Note> {
         var notes = mutableListOf<Note>()
-        if (!userWithNotesDao.getNotes(username).isNullOrEmpty()) {
-            userWithNotesDao.getNotes(username).forEach { userWithNotes ->
+        if (!userWithNotesDao.getUserNotes(username).isNullOrEmpty()) {
+            userWithNotesDao.getUserNotes(username).forEach { userWithNotes ->
                 notes.add(Note(
                     userWithNotes.note.id,
                     userWithNotes.note.username,

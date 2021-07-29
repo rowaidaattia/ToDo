@@ -32,7 +32,7 @@ class NotesFragment : Fragment() {
     private lateinit var fragmentView : View
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
 
         fragmentView = inflater.inflate(
             R.layout.layout_notes, container, false
@@ -62,17 +62,14 @@ class NotesFragment : Fragment() {
                 curr++
             }
         }
-        //FIXME Hardcoded string
-        fragmentView.findViewById<TextView>(R.id.progressText).text = "Task(s): $curr/${max.roundToInt()}"
+        fragmentView.findViewById<TextView>(R.id.progressText).text =
+            getString(R.string.tasks) + "$curr/${max.roundToInt()}"
         return ((curr / max) * 100).toInt()
     }
 
-    //FIXME remove commented code
     @SuppressLint("ResourceAsColor")
     fun initializeProgressBar() {
         val progressBar = fragmentView.findViewById<ProgressBar>(R.id.progressBar)
-//        progressBar.progressDrawable.setColorFilter(
-//            R.color.teal_200, android.graphics.PorterDuff.Mode.SRC_IN)
         progressBar.progress = getCurrentProgress()
     }
 
@@ -90,10 +87,10 @@ class NotesFragment : Fragment() {
                 else -> println("Invalid Tab")
             }
 
-//            println(arguments?.getString(ToDoConstants.tabName) + ", NOTES: " + notes.toString())
         }
     }
 
+    @SuppressLint("SimpleDateFormat")
     private fun initializeHashMap() {
         notesHashMap = HashMap()
         val sdf = SimpleDateFormat("dd/MM/yyyy")
@@ -110,8 +107,7 @@ class NotesFragment : Fragment() {
 
     private fun initializeAdapter() {
 
-        //val activity = (activity as NotesActivity)
-        //FIXME why do you init the adapter when the list is empty ?
+        //FIXME why do you init the adapter when the list is empty ? in order to update it right away once a user adds a note
         datesAdapter = if (notes.isEmpty()) {
             DatesAdapter(HashMap(), arrayOf(), noteViewModel, activity as NotesActivity, arguments?.getString(ToDoConstants.tabName), username)
         }
@@ -131,7 +127,6 @@ class NotesFragment : Fragment() {
         this.notes = notes
         initializeHashMap()
         datesAdapter.update(notesHashMap)
-//        println("NOTES AT UPDATE LIST IN FRAGMENT: $notes")
     }
 
 }

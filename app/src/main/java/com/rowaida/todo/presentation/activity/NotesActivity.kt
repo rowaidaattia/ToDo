@@ -34,8 +34,7 @@ open class NotesActivity : AppCompatActivity(), NotesInterface {
     lateinit var noteViewModel: NoteViewModel
     lateinit var userViewModel: UserViewModel
     private lateinit var tabViewpager: ViewPager
-    //FIXME typo
-    private lateinit var tabTablayout: TabLayout
+    private lateinit var tabTabLayout: TabLayout
     private lateinit var tabToolbar: Toolbar
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,7 +53,7 @@ open class NotesActivity : AppCompatActivity(), NotesInterface {
         // Create the object of Toolbar, ViewPager and
         // TabLayout and use “findViewById()” method*/
         tabViewpager = findViewById(R.id.tab_viewpager)
-        tabTablayout = findViewById(R.id.tab_tablayout)
+        tabTabLayout = findViewById(R.id.tab_tablayout)
         tabToolbar = findViewById(R.id.toolbar)
 
         setSupportActionBar(tabToolbar)
@@ -64,7 +63,7 @@ open class NotesActivity : AppCompatActivity(), NotesInterface {
 
         // If we don't use setupWithViewPager() method then
         // tabs are not used or shown when activity opened
-        tabTablayout.setupWithViewPager(tabViewpager)
+        tabTabLayout.setupWithViewPager(tabViewpager)
     }
 
     fun createFragment(tabName: String) : NotesFragment {
@@ -102,7 +101,24 @@ open class NotesActivity : AppCompatActivity(), NotesInterface {
         }
     }
 
-    override fun editNote(updateNote: Note) {
+    private fun onUpdateClicked(updateNote: Note) {
+        runBlocking {
+            noteViewModel.updateNote(
+                Note(
+                    id = updateNote.id,
+                    username = updateNote.username,
+                    name = updateNote.name,
+                    description = edittext.text.toString(),
+                    status = updateNote.status,
+                    owner = updateNote.username,
+                    date = updateNote.date
+                )
+            )
+            updateFragment(0, noteViewModel.getNotes(username))
+        }
+    }
+
+    override fun onEditNoteClicked(updateNote: Note) {
         val alert = AlertDialog.Builder(this)
         val edittext = EditText(applicationContext)
         edittext.setText(updateNote.description)
@@ -111,23 +127,7 @@ open class NotesActivity : AppCompatActivity(), NotesInterface {
         alert.setPositiveButton(
             getString(R.string.update)
         ) { _, _ -> //What ever you want to do with the value
-
-            //FIXME this should be moved to another method
-            runBlocking {
-                noteViewModel.updateNote(
-                    Note(
-                        id = updateNote.id,
-                        username = updateNote.username,
-                        name = updateNote.name,
-                        description = edittext.text.toString(),
-                        status = updateNote.status,
-                        owner = updateNote.username,
-                        date = updateNote.date
-                    )
-                )
-                updateFragment(0, noteViewModel.getNotes(username))
-            }
-
+            onUpdateClicked(updateNote)
         }
 
         alert.setNegativeButton(
@@ -139,14 +139,28 @@ open class NotesActivity : AppCompatActivity(), NotesInterface {
         alert.show()
     }
 
-    fun logout() {
-        //FIXME why using applicationContext not this?
-        ToDoSharedPreference(applicationContext).remove(ToDoConstants.login)
+    fun onLogoutClicked() {
+        ToDoSharedPreference(this).remove(ToDoConstants.login)
         this.finish()
-        ToDoNavigation.goToActivity(null, this, LoginActivity::class.java)
+        ToDoNavigation.goToActivity(context = this, activityClass = LoginActivity::class.java)
     }
 
-    fun addMyNote() {
+    private fun onSaveClicked(name: String, description: String) {
+        runBlocking {
+            noteViewModel.addNote(
+                Note(
+                    username = username,
+                    name = name,
+                    description = description,
+                    status = Status.IN_PROGRESS,
+                    owner = username,
+                    date = Calendar.getInstance().time
+                ))
+            updateFragment(0, noteViewModel.getNotes(username))
+        }
+    }
+
+    fun onAddMyNoteClicked() {
         val bottomSheetDialog = BottomSheetDialog(this)
         bottomSheetDialog.setContentView(R.layout.bottom_sheet_add_task)
         val save = bottomSheetDialog.findViewById<Button>(R.id.save_button)
@@ -155,19 +169,7 @@ open class NotesActivity : AppCompatActivity(), NotesInterface {
         val description = bottomSheetDialog.findViewById<TextInputEditText>(R.id.task_description)
 
         save?.setOnClickListener {
-            //FIXME this should be moved to another method
-            runBlocking {
-                noteViewModel.addNote(
-                    Note(
-                        username = username,
-                        name = name?.text.toString(),
-                        description = description?.text.toString(),
-                        status = Status.IN_PROGRESS,
-                        owner = username,
-                        date = Calendar.getInstance().time
-                ))
-                updateFragment(0, noteViewModel.getNotes(username))
-            }
+            onSaveClicked(name?.text.toString(), description?.text.toString())
             bottomSheetDialog.dismiss()
         }
 
@@ -178,7 +180,7 @@ open class NotesActivity : AppCompatActivity(), NotesInterface {
         bottomSheetDialog.show()
     }
 
-    fun deleteAllNotes() {
+    fun onDeleteAllNotesClicked() {
         GlobalScope.launch {
             noteViewModel.deleteAllNotes(username)
         }
