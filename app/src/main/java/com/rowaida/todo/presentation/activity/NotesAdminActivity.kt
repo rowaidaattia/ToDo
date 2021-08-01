@@ -6,8 +6,9 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.Spinner
 import androidx.appcompat.app.AlertDialog
-import androidx.viewpager.widget.ViewPager
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.tabs.TabLayoutMediator
 import com.google.android.material.textfield.TextInputEditText
 import com.rowaida.todo.R
 import com.rowaida.todo.data.models.Note
@@ -18,12 +19,16 @@ import java.util.*
 
 class NotesAdminActivity : NotesActivity() {
 
-    override fun setupViewPager(viewpager: ViewPager) {
-        val adapter = ViewPagerAdapter(supportFragmentManager)
+    override fun setupViewPager(viewpager: ViewPager2) {
+        val adapter = ViewPagerAdapter(supportFragmentManager, lifecycle)
         adapter.addFragment(createFragment(getString(R.string.myTasks)), getString(R.string.myTasks))
         adapter.addFragment(createFragment(getString(R.string.subAccountTasks)), getString(R.string.subAccountTasks))
         // setting adapter to view pager.
         viewpager.adapter = adapter
+        val tabTitles = arrayOf(getString(R.string.myTasks), getString(R.string.subAccountTasks))
+        TabLayoutMediator(tabTabLayout, tabViewpager) { tab, position ->
+            tab.text = tabTitles[position]
+        }.attach()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

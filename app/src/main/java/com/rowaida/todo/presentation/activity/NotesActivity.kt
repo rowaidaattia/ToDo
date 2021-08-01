@@ -8,8 +8,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
 import androidx.viewpager.widget.ViewPager
+import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import com.google.android.material.textfield.TextInputEditText
 import com.rowaida.todo.R
 import com.rowaida.todo.data.models.Note
@@ -31,8 +33,8 @@ open class NotesActivity : AppCompatActivity(), NotesInterface {
     private lateinit var edittext: EditText
     lateinit var noteViewModel: NoteViewModel
     lateinit var userViewModel: UserViewModel
-    private lateinit var tabViewpager: ViewPager
-    private lateinit var tabTabLayout: TabLayout
+    lateinit var tabViewpager: ViewPager2
+    lateinit var tabTabLayout: TabLayout
     private lateinit var tabToolbar: Toolbar
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,9 +61,6 @@ open class NotesActivity : AppCompatActivity(), NotesInterface {
 
         setupViewPager(tabViewpager)
 
-        // If we don't use setupWithViewPager() method then
-        // tabs are not used or shown when activity opened
-        tabTabLayout.setupWithViewPager(tabViewpager)
     }
 
     fun createFragment(tabName: String) : NotesFragment {
@@ -76,8 +75,8 @@ open class NotesActivity : AppCompatActivity(), NotesInterface {
 
     // This function is used to add items in arraylist and assign
     // the adapter to view pager
-    open fun setupViewPager(viewpager: ViewPager) {
-        val adapter = ViewPagerAdapter(supportFragmentManager)
+    open fun setupViewPager(viewpager: ViewPager2) {
+        val adapter = ViewPagerAdapter(supportFragmentManager, lifecycle)
         // setting adapter to view pager.
         viewpager.adapter = adapter
     }
