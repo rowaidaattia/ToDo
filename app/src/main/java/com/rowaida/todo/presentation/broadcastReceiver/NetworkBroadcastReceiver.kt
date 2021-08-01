@@ -9,6 +9,7 @@ import android.provider.Settings
 import android.util.Log
 import androidx.core.content.ContextCompat.startActivity
 import com.rowaida.todo.data.models.NetworkState
+import com.rowaida.todo.utils.ToDoConnection
 import com.rowaida.todo.utils.ToDoToast
 
 
@@ -17,24 +18,11 @@ private const val TAG = "MyBroadcastReceiver"
 class NetworkBroadcastReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
-        //println("CONNECTION STATUS: " + getConnectivityStatus(context))
-        when (val networkState = getConnectivityStatus(context)) {
+        when (val networkState = ToDoConnection.getConnectivityStatus(context)) {
             NetworkState.NO_INTERNET ->
                 startActivity(context, Intent(Settings.ACTION_SETTINGS), null)
             else ->
                 ToDoToast.toast(context, "Current Network State: $networkState")
         }
-    }
-
-    //FIXME it is a duplicated method you can create it as utils or as extension
-    //FIXME deprecate code
-    private fun getConnectivityStatus(context: Context): NetworkState {
-        val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val activeNetwork = cm.activeNetworkInfo
-        if (null != activeNetwork) {
-            if (activeNetwork.type == TYPE_WIFI) return NetworkState.WIFI
-            if (activeNetwork.type == TYPE_MOBILE) return NetworkState.MOBILE
-        }
-        return NetworkState.NO_INTERNET
     }
 }

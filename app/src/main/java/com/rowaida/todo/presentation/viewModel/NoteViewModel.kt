@@ -22,7 +22,7 @@ class NoteViewModel(application: Application, useCases: UseCases) :
     }
 
     suspend fun getNotes(username: String): List<Note> {
-        var notes = GlobalScope.async {
+        val notes = GlobalScope.async {
             useCases.getNotesUseCase(username)
         }
         return notes.await()
@@ -30,7 +30,7 @@ class NoteViewModel(application: Application, useCases: UseCases) :
     }
 
     suspend fun getAssignedNotes(username: String): List<Note> {
-        var notes = GlobalScope.async {
+        val notes = GlobalScope.async {
             useCases.getAssignedNotesUseCase(username)
         }
         return notes.await()
@@ -38,7 +38,7 @@ class NoteViewModel(application: Application, useCases: UseCases) :
     }
 
     suspend fun getSubAccountsNotes(username: String): List<Note> {
-        var notes = GlobalScope.async {
+        val notes = GlobalScope.async {
             useCases.getSubAccountsNotesUseCase(username)
         }
         return notes.await()
@@ -61,7 +61,6 @@ class NoteViewModel(application: Application, useCases: UseCases) :
 
     //FIXME remove commented code
     fun deleteAllNotes(username: String) {
-//        useCases.deleteAllNotesUseCase(username)
         Intent(application, ToDoService::class.java)
             .also { intent ->
                 intent.putExtra(ToDoConstants.username, username)

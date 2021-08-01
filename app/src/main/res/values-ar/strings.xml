@@ -38,4 +38,5 @@
     <string name="name">اسم</string>
     <string name="description">وصف</string>
     <string name="tasks">مهام:</string>
+    <string name="select_date">حدد تاريخ</string>
 </resources>

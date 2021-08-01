@@ -20,9 +20,16 @@ class DatesAdapter(private var notesHashMap: HashMap<String, MutableList<Note>>,
 ) :
     RecyclerView.Adapter<DatesAdapter.ViewHolder>() {
 
+    var mRecyclerView: RecyclerView? = null
+
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val date: TextView = itemView.findViewById(R.id.date)
         val notesView: RecyclerView = itemView.findViewById(R.id.notes_recycler_view)
+    }
+
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        super.onAttachedToRecyclerView(recyclerView)
+        mRecyclerView = recyclerView
     }
 
 
@@ -50,6 +57,10 @@ class DatesAdapter(private var notesHashMap: HashMap<String, MutableList<Note>>,
                     tabName, username)
             }
         //FIXME move this to another method
+        initializeRecyclerView(viewHolder, notesAdapter)
+    }
+
+    private fun initializeRecyclerView(viewHolder: DatesAdapter.ViewHolder, notesAdapter: NotesAdapter?) {
         val recyclerView: RecyclerView = viewHolder.notesView
         val recycle: RecyclerView.LayoutManager =
             LinearLayoutManager(ToDoApplication.instance, LinearLayoutManager.VERTICAL, false)
@@ -63,7 +74,11 @@ class DatesAdapter(private var notesHashMap: HashMap<String, MutableList<Note>>,
 
     fun update(updatedMap: HashMap<String, MutableList<Note>>) {
         notesHashMap = updatedMap
-        notifyDataSetChanged()
+        if (!mRecyclerView?.isComputingLayout!!)
+        {
+            // add your code here
+            notifyDataSetChanged()
+        }
     }
 
 }

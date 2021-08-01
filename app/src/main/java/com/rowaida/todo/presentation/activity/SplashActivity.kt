@@ -5,7 +5,6 @@ import android.content.IntentFilter
 import android.net.ConnectivityManager
 import android.os.Bundle
 import android.os.Handler
-import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import com.rowaida.todo.R
 import com.rowaida.todo.data.models.AccountType
@@ -17,14 +16,12 @@ import com.rowaida.todo.utils.ToDoSharedPreference
 class SplashActivity : AppCompatActivity() {
 
     private val splashScreenTimeOut = 2000
+    private lateinit var br : BroadcastReceiver
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        br = NetworkBroadcastReceiver()
         //FIXME try not to use deprecated code, you can create a style with no status bar and App bar and add it to the activity
-        window.setFlags(
-            WindowManager.LayoutParams.FLAG_FULLSCREEN,
-            WindowManager.LayoutParams.FLAG_FULLSCREEN
-        )
         //This method is used so that your splash activity
         //can cover the entire screen.
         setContentView(R.layout.activity_splash)
@@ -41,8 +38,17 @@ class SplashActivity : AppCompatActivity() {
         }, splashScreenTimeOut.toLong())
     }
 
+    override fun onPause() {
+        super.onPause()
+        unregisterReceiver(br)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setBroadcast()
+    }
+
     private fun setBroadcast() {
-        val br: BroadcastReceiver = NetworkBroadcastReceiver()
         val filter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION).apply {
             addAction("android.net.conn.CONNECTIVITY_CHANGE")
         }
@@ -51,8 +57,8 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private fun goToAnotherActivity() {
-        val login = ToDoSharedPreference(applicationContext).getValue(ToDoConstants.login)
-        val accountType = ToDoSharedPreference(applicationContext).getValue(ToDoConstants.accountType)
+        val login = ToDoSharedPreference(applicationContext).getValue(ToDoConstants.login, null)
+        val accountType = ToDoSharedPreference(applicationContext).getValue(ToDoConstants.accountType, null)
 
         if (login != null) {
             val bundle = Bundle()

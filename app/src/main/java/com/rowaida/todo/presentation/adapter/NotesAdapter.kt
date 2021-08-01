@@ -11,15 +11,17 @@ import com.rowaida.todo.data.models.Note
 import com.rowaida.todo.data.models.Status
 import com.rowaida.todo.presentation.activity.NotesInterface
 import com.rowaida.todo.presentation.viewModel.NoteViewModel
-import com.rowaida.todo.utils.ToDoStrings
 import kotlinx.coroutines.runBlocking
 import java.util.*
 
 
-class NotesAdapter(private var notes: MutableList<Note>, val viewModel: NoteViewModel,
+class NotesAdapter(private var notes: MutableList<Note>, val noteViewModel: NoteViewModel,
                    val notesInterface: NotesInterface, private val tabName: String?, private val username: String
 ) :
     RecyclerView.Adapter<NotesAdapter.ViewHolder>() {
+
+    var mRecyclerView: RecyclerView? = null
+
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val status: CheckBox = itemView.findViewById(R.id.note_status)
@@ -30,7 +32,6 @@ class NotesAdapter(private var notes: MutableList<Note>, val viewModel: NoteView
         private val deleteButton: ImageButton = itemView.findViewById(R.id.delete_button)
 
         init {
-            //initializeNote()
             initializeStatus()
             initializeEdit()
             initializeDelete()
@@ -45,7 +46,7 @@ class NotesAdapter(private var notes: MutableList<Note>, val viewModel: NoteView
 
         private fun initializeStatus() {
             //FIXME for check box use onCheckChangeListener not on click listener
-            status.setOnClickListener {
+            status.setOnCheckedChangeListener { _, _ ->
                 val updateNote = notes[adapterPosition]
                 val updateStatus = if (status.isChecked) {
                     Status.DONE
@@ -53,23 +54,45 @@ class NotesAdapter(private var notes: MutableList<Note>, val viewModel: NoteView
                     Status.IN_PROGRESS
                 }
                 //FIXME move to diff method
-                runBlocking {
-                    viewModel.updateNote(
-                        Note(
-                            id = updateNote.id,
-                            username = updateNote.username,
-                            name = updateNote.name,
-                            description = "Description",
-                            status = updateStatus,
-                            owner = updateNote.owner,
-                            date = Calendar.getInstance().time
-                        )
-                    )
-                }
-                getUpdatedNotes(username)
-                //FIXME default value/named param
-                notesInterface.updateFragment(null, notes)
+                updateNoteStatus(updateNote, updateStatus)
             }
+        }
+
+        private fun updateNoteStatus(updateNote: Note, updateStatus: Status) {
+            runBlocking {
+                noteViewModel.updateNote(
+                    Note(
+                        id = updateNote.id,
+                        username = updateNote.username,
+                        name = updateNote.name,
+                        description = "Description",
+                        status = updateStatus,
+                        owner = updateNote.owner,
+                        date = Calendar.getInstance().time
+                    )
+                )
+                getUpdatedNotes(username)
+            }
+            //FIXME default value/named param
+            notesInterface.updateFragment(notes = notes)
+        }
+
+        private fun deleteNote(deleteNote: Note) {
+            runBlocking {
+                noteViewModel.removeNote(
+                    Note(
+                        id = deleteNote.id,
+                        username = deleteNote.username,
+                        name = deleteNote.name,
+                        description = deleteNote.description,
+                        status = deleteNote.status,
+                        owner = deleteNote.owner,
+                        date = Calendar.getInstance().time
+                    )
+                )
+                getUpdatedNotes(username)
+            }
+            notesInterface.updateFragment(null, notes)
         }
 
         private fun initializeDelete() {
@@ -77,21 +100,7 @@ class NotesAdapter(private var notes: MutableList<Note>, val viewModel: NoteView
                 val deleteNote = notes[adapterPosition]
                 val username = deleteNote.username
                 //FIXME move to diff method
-                runBlocking {
-                    viewModel.removeNote(
-                        Note(
-                            id = deleteNote.id,
-                            username = deleteNote.username,
-                            name = deleteNote.name,
-                            description= "Description",
-                            status = deleteNote.status,
-                            owner = deleteNote.owner,
-                            date = Calendar.getInstance().time
-                        )
-                    )
-                }
-                getUpdatedNotes(username)
-                notesInterface.updateFragment(null, notes)
+                deleteNote(deleteNote)
             }
         }
     }
@@ -109,6 +118,12 @@ class NotesAdapter(private var notes: MutableList<Note>, val viewModel: NoteView
 
     }
 
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+        super.onAttachedToRecyclerView(recyclerView)
+        mRecyclerView = recyclerView
+    }
+
+
     // Replace the contents of a view (invoked by the layout manager)
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
 
@@ -117,10 +132,12 @@ class NotesAdapter(private var notes: MutableList<Note>, val viewModel: NoteView
 
         //FIXME Scope functions
         val curNote = notes[position]
-        viewHolder.status.isChecked = curNote.status == Status.DONE
-        viewHolder.note.text = curNote.name
-        viewHolder.description.text = curNote.description
-        viewHolder.statusText.text = curNote.status.toString()
+        viewHolder.let {
+            it.status.isChecked = curNote.status == Status.DONE
+            it.note.text = curNote.name
+            it.description.text = curNote.description
+            it.statusText.text = curNote.status.toString()
+        }
     }
 
     // Return the size of your dataset (invoked by the layout manager)
@@ -133,22 +150,15 @@ class NotesAdapter(private var notes: MutableList<Note>, val viewModel: NoteView
 
     //FIXME don't invoke database or network or any heavy operation form adapter you should make the activity to handle this code
     fun getUpdatedNotes(username: String) {
-        runBlocking {
-            val notesNonMutable : List<Note> =
-                when (tabName) {
-                    ToDoStrings.get(R.string.myTasks) -> viewModel.getNotes(username)
-                    ToDoStrings.get(R.string.subAccountTasks) -> viewModel.getSubAccountsNotes(username)
-                    ToDoStrings.get(R.string.assignedTasks) -> viewModel.getAssignedNotes(username)
-                    else -> listOf()
-                }
-            //val notesNonMutable = viewModel.getNotes(username)
-            notes = if (notesNonMutable.isEmpty()) {
-                mutableListOf()
-            } else {
-                notesNonMutable as MutableList<Note>
-            }
+        if (tabName != null) {
+            notes = notesInterface.getUpdatedNotes(username, tabName)
+        }
+        if (!mRecyclerView?.isComputingLayout!!)
+        {
+            // add your code here
             notifyDataSetChanged()
         }
+
     }
 
 }

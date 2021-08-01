@@ -18,9 +18,7 @@ import com.rowaida.todo.framework.ToDoViewModelFactory
 import com.rowaida.todo.presentation.adapter.ViewPagerAdapter
 import com.rowaida.todo.presentation.viewModel.NoteViewModel
 import com.rowaida.todo.presentation.viewModel.UserViewModel
-import com.rowaida.todo.utils.ToDoConstants
-import com.rowaida.todo.utils.ToDoNavigation
-import com.rowaida.todo.utils.ToDoSharedPreference
+import com.rowaida.todo.utils.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -30,7 +28,7 @@ import java.util.*
 open class NotesActivity : AppCompatActivity(), NotesInterface {
 
     lateinit var username : String
-    lateinit var edittext: EditText
+    private lateinit var edittext: EditText
     lateinit var noteViewModel: NoteViewModel
     lateinit var userViewModel: UserViewModel
     private lateinit var tabViewpager: ViewPager
@@ -137,6 +135,24 @@ open class NotesActivity : AppCompatActivity(), NotesInterface {
         }
 
         alert.show()
+    }
+
+    override fun getUpdatedNotes(username: String, tabName: String): MutableList<Note> {
+        var notesNonMutable: List<Note>
+        runBlocking {
+            notesNonMutable =
+                when (tabName) {
+                    applicationContext.getString(R.string.myTasks) -> noteViewModel.getNotes(username)
+                    applicationContext.getString(R.string.subAccountTasks) -> noteViewModel.getSubAccountsNotes(username)
+                    applicationContext.getString(R.string.assignedTasks) -> noteViewModel.getAssignedNotes(username)
+                    else -> listOf()
+                }
+        }
+        return if (notesNonMutable.isEmpty()) {
+            mutableListOf()
+        } else {
+            notesNonMutable as MutableList<Note>
+        }
     }
 
     fun onLogoutClicked() {

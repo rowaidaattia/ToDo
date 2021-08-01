@@ -78,7 +78,7 @@ class SignupActivity : AppCompatActivity() {
         birthdayText?.inputType = InputType.TYPE_NULL
         birthdayText?.setTextColor(R.color.black)
         birthdayText?.setOnClickListener {
-            val datePicker = ToDoDatePicker.setDatePicker()
+            val datePicker = ToDoDatePicker.setDatePicker(applicationContext)
 
             datePicker.addOnPositiveButtonClickListener {
                 birthdayText.setText(outputDateFormat.format(it))
