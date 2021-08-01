@@ -49,6 +49,7 @@ class DatesAdapter(private var notesHashMap: HashMap<String, MutableList<Note>>,
                     it, viewModel, notesInterface,
                     tabName, username)
             }
+        //FIXME move this to another method
         val recyclerView: RecyclerView = viewHolder.notesView
         val recycle: RecyclerView.LayoutManager =
             LinearLayoutManager(ToDoApplication.instance, LinearLayoutManager.VERTICAL, false)

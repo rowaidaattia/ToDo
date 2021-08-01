@@ -20,6 +20,7 @@ class SplashActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //FIXME try not to use deprecated code, you can create a style with no status bar and App bar and add it to the activity
         window.setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
@@ -28,9 +29,9 @@ class SplashActivity : AppCompatActivity() {
         //can cover the entire screen.
         setContentView(R.layout.activity_splash)
         //this will bind your SplashActivity.class file with activity_splash.
-
         Handler().postDelayed({
 
+            //FIXME register on onResume and unregister
             setBroadcast()
 
             goToAnotherActivity()
@@ -39,6 +40,7 @@ class SplashActivity : AppCompatActivity() {
 
         }, splashScreenTimeOut.toLong())
     }
+
     private fun setBroadcast() {
         val br: BroadcastReceiver = NetworkBroadcastReceiver()
         val filter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION).apply {

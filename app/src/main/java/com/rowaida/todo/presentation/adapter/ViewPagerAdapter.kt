@@ -8,11 +8,13 @@ import androidx.fragment.app.FragmentPagerAdapter
 // This "ViewPagerAdapter" class overrides functions which are
 // necessary to get information about which item is selected
 // by user, what is title for selected item and so on.*/
+//FIXME Fragment pager adapter is deprecated
 class ViewPagerAdapter// this is a secondary constructor of ViewPagerAdapter class.
     (supportFragmentManager: FragmentManager) : FragmentPagerAdapter(supportFragmentManager) {
 
     // objects of arraylist. One is of Fragment type and
     // another one is of String type.*/
+    //FIXME why there is 1 in vars name
     private var fragmentList1: ArrayList<Fragment> = ArrayList()
     private var fragmentTitleList1: ArrayList<String> = ArrayList()
 

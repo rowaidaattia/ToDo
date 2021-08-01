@@ -4,6 +4,7 @@ import android.content.Context
 import android.widget.EditText
 import androidx.appcompat.app.AlertDialog
 
+//FIXME delete unused code
 object ToDoAlert {
 
     fun dialog(context: Context, editText: EditText, message: String) {

@@ -26,6 +26,8 @@ class NetworkBroadcastReceiver : BroadcastReceiver() {
         }
     }
 
+    //FIXME it is a duplicated method you can create it as utils or as extension
+    //FIXME deprecate code
     private fun getConnectivityStatus(context: Context): NetworkState {
         val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val activeNetwork = cm.activeNetworkInfo

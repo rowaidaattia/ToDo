@@ -44,6 +44,7 @@ class NotesAdapter(private var notes: MutableList<Note>, val viewModel: NoteView
         }
 
         private fun initializeStatus() {
+            //FIXME for check box use onCheckChangeListener not on click listener
             status.setOnClickListener {
                 val updateNote = notes[adapterPosition]
                 val updateStatus = if (status.isChecked) {
@@ -51,6 +52,7 @@ class NotesAdapter(private var notes: MutableList<Note>, val viewModel: NoteView
                 } else {
                     Status.IN_PROGRESS
                 }
+                //FIXME move to diff method
                 runBlocking {
                     viewModel.updateNote(
                         Note(
@@ -65,6 +67,7 @@ class NotesAdapter(private var notes: MutableList<Note>, val viewModel: NoteView
                     )
                 }
                 getUpdatedNotes(username)
+                //FIXME default value/named param
                 notesInterface.updateFragment(null, notes)
             }
         }
@@ -73,6 +76,7 @@ class NotesAdapter(private var notes: MutableList<Note>, val viewModel: NoteView
             deleteButton.setOnClickListener {
                 val deleteNote = notes[adapterPosition]
                 val username = deleteNote.username
+                //FIXME move to diff method
                 runBlocking {
                     viewModel.removeNote(
                         Note(
@@ -111,6 +115,7 @@ class NotesAdapter(private var notes: MutableList<Note>, val viewModel: NoteView
         // Get element from your dataset at this position and replace the
         // contents of the view with that element
 
+        //FIXME Scope functions
         val curNote = notes[position]
         viewHolder.status.isChecked = curNote.status == Status.DONE
         viewHolder.note.text = curNote.name
@@ -126,6 +131,7 @@ class NotesAdapter(private var notes: MutableList<Note>, val viewModel: NoteView
         notifyDataSetChanged()
     }
 
+    //FIXME don't invoke database or network or any heavy operation form adapter you should make the activity to handle this code
     fun getUpdatedNotes(username: String) {
         runBlocking {
             val notesNonMutable : List<Note> =

@@ -11,8 +11,8 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
-
-class NoteViewModel (application: Application, useCases: UseCases) :
+//FIXME fix warnings
+class NoteViewModel(application: Application, useCases: UseCases) :
     ToDoViewModel(application, useCases) {
 
     fun addNote(note: Note) {
@@ -21,7 +21,7 @@ class NoteViewModel (application: Application, useCases: UseCases) :
         }
     }
 
-    suspend fun getNotes(username: String) : List<Note> {
+    suspend fun getNotes(username: String): List<Note> {
         var notes = GlobalScope.async {
             useCases.getNotesUseCase(username)
         }
@@ -29,7 +29,7 @@ class NoteViewModel (application: Application, useCases: UseCases) :
 
     }
 
-    suspend fun getAssignedNotes(username: String) : List<Note> {
+    suspend fun getAssignedNotes(username: String): List<Note> {
         var notes = GlobalScope.async {
             useCases.getAssignedNotesUseCase(username)
         }
@@ -37,7 +37,7 @@ class NoteViewModel (application: Application, useCases: UseCases) :
 
     }
 
-    suspend fun getSubAccountsNotes(username: String) : List<Note> {
+    suspend fun getSubAccountsNotes(username: String): List<Note> {
         var notes = GlobalScope.async {
             useCases.getSubAccountsNotesUseCase(username)
         }
@@ -59,13 +59,14 @@ class NoteViewModel (application: Application, useCases: UseCases) :
 
     }
 
+    //FIXME remove commented code
     fun deleteAllNotes(username: String) {
 //        useCases.deleteAllNotesUseCase(username)
         Intent(application, ToDoService::class.java)
             .also { intent ->
                 intent.putExtra(ToDoConstants.username, username)
                 application.startService(intent)
-        }
+            }
     }
 
 }
